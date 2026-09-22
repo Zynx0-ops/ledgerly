@@ -1,26 +1,203 @@
 @import "tailwindcss";
 
+/* ── Design tokens ───────────────────────────────────────────────────────────
+   Light values live on :root. Dark values are *selected* (their own steps from
+   the same ramps), declared twice: once under the OS media query and once under
+   the explicit [data-theme="dark"] toggle, so the toggle wins both ways.
+   ────────────────────────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  color-scheme: light;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --surface-0: #f6f6f4;        /* app background            */
+  --surface-1: #fcfcfb;        /* cards, chart surface      */
+  --surface-2: #f0efec;        /* wells, tracks, hover      */
+  --surface-3: #e5e4e0;        /* pressed / active          */
+
+  --border: #e2e1dc;
+  --border-strong: #cbcac4;
+
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #86857f;
+  --text-inverse: #fcfcfb;
+
+  --accent: #2a78d6;
+  --accent-hover: #256abf;
+  --accent-wash: #eaf2fd;
+
+  /* Status — reserved. Never reused as a series color. */
+  --good: #008300;
+  --good-wash: #e6f3e6;
+  --warning: #eda100;
+  --warning-wash: #fdf3de;
+  --serious: #eb6834;
+  --critical: #e34948;
+  --critical-wash: #fdecec;
+
+  /* Categorical series slots — fixed order, never cycled, never rank-assigned.
+     Validated: adjacent CVD ΔE 9.1, normal-vision ΔE 19.6 (light). */
+  --series-1: #2a78d6;  /* blue    */
+  --series-2: #eb6834;  /* orange  */
+  --series-3: #1baf7a;  /* aqua    */
+  --series-4: #eda100;  /* yellow  */
+  --series-5: #e87ba4;  /* magenta */
+  --series-6: #008300;  /* green   */
+  --series-7: #4a3aa7;  /* violet  */
+  --series-8: #e34948;  /* red     */
+
+  --grid: #e8e7e3;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-card: 0 1px 2px rgb(11 11 11 / 0.04), 0 1px 3px rgb(11 11 11 / 0.03);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+
+    --surface-0: #121211;
+    --surface-1: #1a1a19;
+    --surface-2: #232321;
+    --surface-3: #2e2e2b;
+
+    --border: #313130;
+    --border-strong: #454541;
+
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #8d8c84;
+    --text-inverse: #121211;
+
+    --accent: #3987e5;
+    --accent-hover: #5598e7;
+    --accent-wash: #16273c;
+
+    --good: #3aa03a;
+    --good-wash: #16281a;
+    --warning: #c98500;
+    --warning-wash: #2e2410;
+    --serious: #d95926;
+    --critical: #e66767;
+    --critical-wash: #331c1c;
+
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
+    --series-5: #d55181;
+    --series-6: #008300;
+    --series-7: #9085e9;
+    --series-8: #e66767;
+
+    --grid: #2a2a28;
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
   }
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --surface-0: #121211;
+  --surface-1: #1a1a19;
+  --surface-2: #232321;
+  --surface-3: #2e2e2b;
+
+  --border: #313130;
+  --border-strong: #454541;
+
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #8d8c84;
+  --text-inverse: #121211;
+
+  --accent: #3987e5;
+  --accent-hover: #5598e7;
+  --accent-wash: #16273c;
+
+  --good: #3aa03a;
+  --good-wash: #16281a;
+  --warning: #c98500;
+  --warning-wash: #2e2410;
+  --serious: #d95926;
+  --critical: #e66767;
+  --critical-wash: #331c1c;
+
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+  --series-7: #9085e9;
+  --series-8: #e66767;
+
+  --grid: #2a2a28;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+}
+
+@theme inline {
+  --color-surface-0: var(--surface-0);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ink: var(--text-primary);
+  --color-ink-2: var(--text-secondary);
+  --color-ink-3: var(--text-muted);
+  --color-ink-inverse: var(--text-inverse);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-wash: var(--accent-wash);
+  --color-good: var(--good);
+  --color-good-wash: var(--good-wash);
+  --color-warning: var(--warning);
+  --color-warning-wash: var(--warning-wash);
+  --color-serious: var(--serious);
+  --color-critical: var(--critical);
+  --color-critical-wash: var(--critical-wash);
+  --color-grid: var(--grid);
+  --radius-card: var(--radius);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  background: var(--surface-0);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--surface-0);
+  color: var(--text-primary);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Numbers that align vertically (table rows, axis ticks) get equal-width digits.
+   Hero figures and stat-tile values deliberately do NOT — see .figure. */
+.tnum { font-variant-numeric: tabular-nums; }
+.figure { font-variant-numeric: proportional-nums; letter-spacing: -0.02em; }
+
+/* Refetch keeps the frame: hold the previous render, no skeleton flash. */
+.pending-hold { opacity: 0.55; transition: opacity 120ms ease-out; }
+
+::selection { background: var(--accent-wash); }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(var(--cal-invert, 0));
+  cursor: pointer;
+}
+:root[data-theme="dark"] input[type="date"] { --cal-invert: 1; }
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) input[type="date"] { --cal-invert: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

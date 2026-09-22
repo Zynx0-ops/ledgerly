@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ledgerly: your financial data. Never commit this.
+/data
+*.db
+*.db-shm
+*.db-wal
+
+# Local editor / agent config
+.claude
