@@ -37,7 +37,7 @@ export default async function GoalsPage() {
       </PageHeader>
 
       {goals.length ? (
-        <div className="mb-4 grid gap-4 sm:grid-cols-3">
+        <div className="mb-5 grid gap-3 sm:grid-cols-3">
           <Card>
             <StatTile label="Saved toward goals" cents={totalSaved} hero />
           </Card>
@@ -100,17 +100,17 @@ export default async function GoalsPage() {
                       trigger={{
                         label: "Edit",
                         className:
-                          "rounded-[6px] px-2 py-1 text-[12px] text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-3)] hover:text-[var(--text-primary)]",
+                          "t-subhead px-1 text-[var(--accent)] transition-opacity active:opacity-60",
                       }}
                     />
                   }
                 />
 
                 <div className="mb-2 flex items-baseline justify-between gap-3">
-                  <span className="figure text-[26px] leading-none font-semibold text-[var(--text-primary)]">
+                  <span className="figure text-[27px] leading-none text-[var(--text-primary)]">
                     {formatMoney(g.savedCents, { showCents: false })}
                   </span>
-                  <span className="tnum text-[13px] text-[var(--text-muted)]">
+                  <span className="tnum t-subhead text-[var(--text-secondary)]">
                     of {formatMoney(g.targetCents, { showCents: false })}
                   </span>
                 </div>
@@ -122,7 +122,7 @@ export default async function GoalsPage() {
                   tone={done ? "good" : "accent"}
                 />
 
-                <p className="mt-2 text-[12.5px] text-[var(--text-secondary)]">
+                <p className="t-footnote mt-2 text-[var(--text-secondary)]">
                   {done ? (
                     <span className="font-medium text-[var(--good)]">Goal reached 🎉</span>
                   ) : (
@@ -134,9 +134,9 @@ export default async function GoalsPage() {
                     </>
                   )}
                 </p>
-                {pace ? <p className="mt-1 text-[12px] text-[var(--text-muted)]">{pace}</p> : null}
+                {pace ? <p className="t-footnote mt-1 text-[var(--text-secondary)]">{pace}</p> : null}
                 {g.note ? (
-                  <p className="mt-1 text-[12px] text-[var(--text-muted)]">{g.note}</p>
+                  <p className="t-footnote mt-1 text-[var(--text-muted)]">{g.note}</p>
                 ) : null}
 
                 <form
@@ -148,7 +148,7 @@ export default async function GoalsPage() {
                     Add to {g.name}
                   </label>
                   <div className="relative flex-1">
-                    <span className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-[12.5px] text-[var(--text-muted)]">
+                    <span className="t-footnote pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-[var(--text-muted)]">
                       $
                     </span>
                     <input
@@ -156,12 +156,12 @@ export default async function GoalsPage() {
                       name="amount"
                       inputMode="decimal"
                       placeholder="Add a contribution"
-                      className="tnum w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface-1)] py-1.5 pr-2 pl-5 text-[13px] text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-wash)]"
+                      className="tnum t-subhead w-full rounded-[9px] border-0 bg-[var(--surface-2)] py-2 pr-2 pl-5 text-[var(--text-primary)] outline-none transition-shadow placeholder:text-[var(--text-muted)] focus:ring-2 focus:ring-[var(--accent)]"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="rounded-[var(--radius-sm)] border border-[var(--border)] px-3 py-1.5 text-[12.5px] font-medium text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)]"
+                    className="t-subhead shrink-0 px-2 font-semibold text-[var(--accent)] transition-opacity active:opacity-60"
                   >
                     Add
                   </button>

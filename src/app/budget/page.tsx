@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Card, CardHeader } from "@/components/ui/Card";
+import { ListSection } from "@/components/ui/List";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { MonthNav } from "@/components/ui/MonthNav";
 import { Meter } from "@/components/ui/Meter";
@@ -59,7 +60,7 @@ export default async function BudgetPage({
         </Suspense>
       </PageHeader>
 
-      <div className="mb-4 grid gap-4 sm:grid-cols-3">
+      <div className="mb-5 grid gap-3 sm:grid-cols-3">
         <Card>
           <StatTile
             label="Budgeted"
@@ -80,9 +81,9 @@ export default async function BudgetPage({
         </Card>
         <Card>
           <div className="flex flex-col justify-between gap-2">
-            <p className="text-[13px] font-medium text-[var(--text-secondary)]">Remaining</p>
+            <p className="t-subhead text-[var(--text-secondary)]">Remaining</p>
             <p
-              className="figure text-[26px] leading-none font-semibold"
+              className="figure text-[27px] leading-none"
               style={{
                 color: totals.remainingCents < 0 ? "var(--critical)" : "var(--text-primary)",
               }}
@@ -90,7 +91,7 @@ export default async function BudgetPage({
               {formatMoney(totals.remainingCents, { showCents: false })}
             </p>
             <p
-              className="text-[12.5px]"
+              className="t-footnote"
               style={{ color: onPace ? "var(--good)" : "var(--warning)" }}
             >
               {totals.budgetedCents === 0
@@ -143,46 +144,41 @@ export default async function BudgetPage({
         ) : null}
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-5">
         {incomeLines.length ? (
-          <Card padded={false}>
-            <div className="flex items-baseline justify-between px-4 pt-4 pb-2">
-              <h2 className="text-[13px] font-semibold tracking-wide text-[var(--text-secondary)] uppercase">
-                Expected income
-              </h2>
-              <span className="tnum text-[12.5px] text-[var(--text-muted)]">
+          <ListSection
+            header="Expected income"
+            trailing={
+              <span className="tnum">
                 {formatMoney(actualIncome, { showCents: false })} received of{" "}
                 {formatMoney(plannedIncome, { showCents: false })} planned
               </span>
-            </div>
-            <ul>
-              {incomeLines.map((l) => (
-                <BudgetRow key={l.categoryId} line={l} month={month} />
-              ))}
-            </ul>
-          </Card>
+            }
+          >
+            {incomeLines.map((l) => (
+              <BudgetRow key={l.categoryId} line={l} month={month} />
+            ))}
+          </ListSection>
         ) : null}
 
         {[...byGroup.entries()].map(([group, items]) => {
           const budgeted = items.reduce((n, l) => n + l.budgetedCents, 0);
           const spent = items.reduce((n, l) => n + Math.max(0, l.actualCents), 0);
           return (
-            <Card key={group} padded={false}>
-              <div className="flex items-baseline justify-between px-4 pt-4 pb-2">
-                <h2 className="text-[13px] font-semibold tracking-wide text-[var(--text-secondary)] uppercase">
-                  {group}
-                </h2>
-                <span className="tnum text-[12.5px] text-[var(--text-muted)]">
+            <ListSection
+              key={group}
+              header={group}
+              trailing={
+                <span className="tnum">
                   {formatMoney(spent, { showCents: false })}
                   {budgeted > 0 ? ` of ${formatMoney(budgeted, { showCents: false })}` : ""}
                 </span>
-              </div>
-              <ul>
-                {items.map((l) => (
-                  <BudgetRow key={l.categoryId} line={l} month={month} />
-                ))}
-              </ul>
-            </Card>
+              }
+            >
+              {items.map((l) => (
+                <BudgetRow key={l.categoryId} line={l} month={month} />
+              ))}
+            </ListSection>
           );
         })}
       </div>

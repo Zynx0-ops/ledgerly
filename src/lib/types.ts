@@ -114,3 +114,22 @@ export interface Rule {
   colorSlot: number;
   priority: number;
 }
+
+/** Glyph + palette slot per account type, so an account reads at a glance and
+ *  keeps the same identity color everywhere it appears. */
+const ACCOUNT_LOOK: Record<string, { glyph: string; slot: number }> = {
+  checking: { glyph: "🏦", slot: 3 },
+  savings: { glyph: "🐷", slot: 6 },
+  cash: { glyph: "💵", slot: 6 },
+  investment: { glyph: "📈", slot: 7 },
+  credit: { glyph: "💳", slot: 1 },
+  loan: { glyph: "🧾", slot: 8 },
+};
+
+export function accountGlyph(type: string): string {
+  return ACCOUNT_LOOK[type]?.glyph ?? "▤";
+}
+
+export function accountSlot(type: string): number {
+  return ACCOUNT_LOOK[type]?.slot ?? 3;
+}

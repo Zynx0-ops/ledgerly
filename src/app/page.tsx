@@ -6,7 +6,8 @@ import { Meter } from "@/components/ui/Meter";
 import { MonthNav } from "@/components/ui/MonthNav";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { DonutChart } from "@/components/charts/DonutChart";
+import { IconTile } from "@/components/ui/IconTile";
+import { SpendingSplit } from "@/components/charts/SpendingSplit";
 import { CashflowChart } from "@/components/charts/CashflowChart";
 import { PaceChart } from "@/components/charts/PaceChart";
 import { BarList } from "@/components/charts/BarList";
@@ -24,7 +25,6 @@ import {
 } from "@/server/queries";
 import { currentMonth, daysInMonth, formatMonth, relativeDate, todayKey } from "@/lib/dates";
 import { formatMoney, percent } from "@/lib/money";
-import { seriesVar } from "@/lib/palette";
 
 // Every page reads the local database, so nothing may be prerendered and cached.
 export const dynamic = "force-dynamic";
@@ -96,7 +96,7 @@ export default async function DashboardPage({
           </EmptyState>
         </Card>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5">
           {/* Hero — exactly one per view. */}
           <div className="grid gap-4 lg:grid-cols-3">
             <Card className="lg:col-span-2">
@@ -111,7 +111,7 @@ export default async function DashboardPage({
                   totals.budgetedCents === 0 ? (
                     <Link
                       href={`/budget?month=${month}`}
-                      className="rounded-[var(--radius-sm)] bg-[var(--accent)] px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-[var(--accent-hover)]"
+                      className="rounded-[9px] bg-[var(--accent)] px-3 py-1.5 t-footnote font-semibold text-white transition-opacity active:opacity-70"
                     >
                       Set a budget
                     </Link>
@@ -119,7 +119,7 @@ export default async function DashboardPage({
                 }
               />
               <p
-                className="figure text-[44px] leading-none font-semibold"
+                className="figure text-[42px] leading-[1.04]"
                 style={{
                   color:
                     totals.budgetedCents > 0 && leftToSpend < 0
@@ -193,13 +193,13 @@ export default async function DashboardPage({
                 action={
                   <Link
                     href={`/reports?month=${month}`}
-                    className="text-[12.5px] text-[var(--accent)] hover:underline"
+                    className="t-footnote text-[var(--accent)] transition-opacity active:opacity-60"
                   >
                     Reports →
                   </Link>
                 }
               />
-              <DonutChart slices={groups} centerLabel="Spent" />
+              <SpendingSplit slices={groups} />
             </Card>
 
             <Card>
@@ -213,7 +213,7 @@ export default async function DashboardPage({
                 action={
                   <Link
                     href={`/budget?month=${month}`}
-                    className="text-[12.5px] text-[var(--accent)] hover:underline"
+                    className="t-footnote text-[var(--accent)] transition-opacity active:opacity-60"
                   >
                     Budget →
                   </Link>
@@ -225,16 +225,12 @@ export default async function DashboardPage({
                     const used = percent(l.actualCents, l.budgetedCents);
                     return (
                       <li key={l.categoryId}>
-                        <div className="mb-1.5 flex items-baseline justify-between gap-3">
-                          <span className="flex min-w-0 items-center gap-2">
-                            <span aria-hidden className="text-[13px]">
-                              {l.categoryIcon}
-                            </span>
-                            <span className="truncate text-[13px] text-[var(--text-primary)]">
-                              {l.categoryName}
-                            </span>
+                        <div className="mb-2 flex items-center gap-2.5">
+                          <IconTile glyph={l.categoryIcon || "•"} colorSlot={l.colorSlot} size={26} />
+                          <span className="t-subhead min-w-0 flex-1 truncate text-[var(--text-primary)]">
+                            {l.categoryName}
                           </span>
-                          <span className="tnum shrink-0 text-[12.5px] text-[var(--text-secondary)]">
+                          <span className="tnum t-footnote shrink-0 text-[var(--text-secondary)]">
                             {formatMoney(l.actualCents, { showCents: false })}
                             <span className="text-[var(--text-muted)]">
                               {" / "}
@@ -242,12 +238,14 @@ export default async function DashboardPage({
                             </span>
                           </span>
                         </div>
-                        <Meter value={l.actualCents} max={l.budgetedCents} />
-                        {used > 100 ? (
-                          <p className="mt-1 text-[11.5px] text-[var(--critical)]">
-                            {formatMoney(l.actualCents - l.budgetedCents, { showCents: false })} over
-                          </p>
-                        ) : null}
+                        <div className="pl-[36px]">
+                          <Meter value={l.actualCents} max={l.budgetedCents} height={6} />
+                          {used > 100 ? (
+                            <p className="t-caption mt-1 text-[var(--critical)]">
+                              {formatMoney(l.actualCents - l.budgetedCents, { showCents: false })} over
+                            </p>
+                          ) : null}
+                        </div>
                       </li>
                     );
                   })}
@@ -280,7 +278,7 @@ export default async function DashboardPage({
                 action={
                   <Link
                     href={`/transactions?month=${month}`}
-                    className="text-[12.5px] text-[var(--accent)] hover:underline"
+                    className="t-footnote text-[var(--accent)] transition-opacity active:opacity-60"
                   >
                     All transactions →
                   </Link>
@@ -306,7 +304,7 @@ export default async function DashboardPage({
                   action={
                     <Link
                       href="/transactions"
-                      className="text-[12.5px] text-[var(--accent)] hover:underline"
+                      className="t-footnote text-[var(--accent)] transition-opacity active:opacity-60"
                     >
                       View all →
                     </Link>
@@ -317,35 +315,21 @@ export default async function DashboardPage({
                     {recent.map((t) => (
                       <li
                         key={t.id}
-                        className="flex items-center gap-3 border-b border-[var(--border)] py-2.5 last:border-b-0"
+                        className="relative flex items-center gap-3 py-2.5 after:pointer-events-none after:absolute after:right-0 after:bottom-0 after:left-[42px] after:h-[0.5px] after:bg-[var(--border)] last:after:hidden"
                       >
-                        <span
-                          aria-hidden
-                          className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-[13px]"
-                          style={{ background: "var(--surface-2)" }}
-                        >
-                          {t.categoryIcon ?? "•"}
-                        </span>
+                        <IconTile glyph={t.categoryIcon ?? "•"} colorSlot={t.categoryColorSlot} />
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate text-[13px] text-[var(--text-primary)]">
+                          <span className="t-body block truncate text-[var(--text-primary)]">
                             {t.merchant}
                           </span>
-                          <span className="flex items-center gap-1.5 text-[11.5px] text-[var(--text-muted)]">
-                            {t.categoryColorSlot ? (
-                              <span
-                                aria-hidden
-                                className="h-1.5 w-1.5 rounded-full"
-                                style={{ background: seriesVar(t.categoryColorSlot) }}
-                              />
-                            ) : null}
+                          <span className="t-footnote block truncate text-[var(--text-secondary)]">
                             {t.categoryName ?? "Uncategorized"} · {relativeDate(t.date)}
                           </span>
                         </span>
                         <span
-                          className="tnum shrink-0 text-[13px] font-medium"
+                          className="tnum t-body shrink-0 font-medium"
                           style={{
-                            color:
-                              t.amountCents > 0 ? "var(--good)" : "var(--text-primary)",
+                            color: t.amountCents > 0 ? "var(--good)" : "var(--text-primary)",
                           }}
                         >
                           {formatMoney(t.amountCents, { signed: true })}
@@ -354,7 +338,7 @@ export default async function DashboardPage({
                     ))}
                   </ul>
                 ) : (
-                  <p className="py-6 text-center text-[13px] text-[var(--text-muted)]">
+                  <p className="t-subhead py-6 text-center text-[var(--text-secondary)]">
                     No transactions in {formatMonth(month)}.
                   </p>
                 )}
@@ -367,7 +351,7 @@ export default async function DashboardPage({
                     action={
                       <Link
                         href="/goals"
-                        className="text-[12.5px] text-[var(--accent)] hover:underline"
+                        className="t-footnote text-[var(--accent)] transition-opacity active:opacity-60"
                       >
                         All goals →
                       </Link>
@@ -377,10 +361,10 @@ export default async function DashboardPage({
                     {goals.map((g) => (
                       <li key={g.id}>
                         <div className="mb-1.5 flex items-baseline justify-between gap-3">
-                          <span className="truncate text-[13px] text-[var(--text-primary)]">
+                          <span className="t-subhead truncate text-[var(--text-primary)]">
                             {g.name}
                           </span>
-                          <span className="tnum shrink-0 text-[12.5px] text-[var(--text-secondary)]">
+                          <span className="tnum t-footnote shrink-0 text-[var(--text-secondary)]">
                             {formatMoney(g.savedCents, { showCents: false })}
                             <span className="text-[var(--text-muted)]">
                               {" / "}

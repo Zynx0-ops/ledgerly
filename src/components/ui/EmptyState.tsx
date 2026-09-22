@@ -17,16 +17,21 @@ export function EmptyState({
   children?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 px-6 py-12 text-center">
-      <span aria-hidden className="text-2xl opacity-60">
+    <div className="flex flex-col items-center justify-center gap-2.5 px-6 py-14 text-center">
+      <span
+        aria-hidden
+        className="grid h-12 w-12 place-items-center rounded-[14px] bg-[var(--surface-2)] text-[22px]"
+      >
         {icon}
       </span>
-      <h3 className="text-[15px] font-semibold text-[var(--text-primary)]">{title}</h3>
-      <p className="max-w-sm text-[13px] leading-relaxed text-[var(--text-secondary)]">{body}</p>
+      <h3 className="t-title-3 mt-1 text-[var(--text-primary)]">{title}</h3>
+      <p className="t-subhead max-w-sm leading-relaxed text-balance text-[var(--text-secondary)]">
+        {body}
+      </p>
       {cta && href ? (
         <Link
           href={href}
-          className="mt-1 rounded-[var(--radius-sm)] bg-[var(--accent)] px-3.5 py-2 text-[13px] font-medium text-white transition-colors hover:bg-[var(--accent-hover)]"
+          className="mt-2 rounded-[10px] bg-[var(--accent)] px-4 py-2 t-headline text-white transition-opacity active:opacity-70"
         >
           {cta}
         </Link>

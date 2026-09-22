@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { fieldBase, fieldClass, ghostButton, labelClass, primaryButton } from "@/components/ui/Dialog";
+import { SelectField, Switch } from "@/components/ui/Controls";
 import { parseCsv, guessRoles, ROLE_LABELS, type ColumnRole } from "@/lib/csv";
 import { formatMoney } from "@/lib/money";
 import { formatDate } from "@/lib/dates";
@@ -89,7 +90,7 @@ export function ImportWizard({ accounts }: { accounts: Account[] }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <ol className="flex flex-wrap items-center gap-2 text-[12.5px]">
+      <ol className="flex flex-wrap items-center gap-2 t-footnote">
         {(["upload", "map", "review"] as Step[]).map((s, i) => {
           const order = ["upload", "map", "review", "done"];
           const active = step === s;
@@ -119,7 +120,7 @@ export function ImportWizard({ accounts }: { accounts: Account[] }) {
       {error ? (
         <p
           role="alert"
-          className="rounded-[var(--radius-sm)] border border-[var(--critical)] bg-[var(--critical-wash)] px-3 py-2 text-[13px] text-[var(--critical)]"
+          className="rounded-[10px] border border-[var(--critical)] bg-[var(--critical-wash)] px-3 py-2 t-subhead text-[var(--critical)]"
         >
           {error}
         </p>
@@ -127,32 +128,32 @@ export function ImportWizard({ accounts }: { accounts: Account[] }) {
 
       {step === "upload" ? (
         <div className="flex flex-col gap-4">
-          <div>
+          <div className="sm:max-w-[288px]">
             <label className={labelClass} htmlFor="import-account">
               Import into which account?
             </label>
-            <select
+            <SelectField
               id="import-account"
               value={accountId}
               onChange={(e) => setAccountId(e.target.value)}
-              className={`${fieldBase} w-full sm:w-72`}
+              className={`${fieldBase} w-full`}
             >
               {accounts.map((a) => (
                 <option key={a.id} value={a.id}>
                   {a.name}
                 </option>
               ))}
-            </select>
+            </SelectField>
           </div>
 
           <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-[var(--radius)] border border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] px-6 py-10 text-center transition-colors hover:border-[var(--accent)] hover:bg-[var(--accent-wash)]">
             <span aria-hidden className="text-2xl opacity-60">
               ↧
             </span>
-            <span className="text-[13.5px] font-medium text-[var(--text-primary)]">
+            <span className="t-subhead font-medium text-[var(--text-primary)]">
               Choose a CSV file
             </span>
-            <span className="max-w-sm text-[12.5px] text-[var(--text-secondary)]">
+            <span className="max-w-sm t-footnote text-[var(--text-secondary)]">
               Export one from your bank — most call it &ldquo;Download transactions&rdquo;. The file
               is read in your browser and never leaves your machine.
             </span>
@@ -168,7 +169,7 @@ export function ImportWizard({ accounts }: { accounts: Account[] }) {
           </label>
 
           <details className="group">
-            <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-[12.5px] text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+            <summary className="inline-flex cursor-pointer list-none items-center gap-1 t-footnote text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
               <span aria-hidden className="transition-transform group-open:rotate-90">
                 ›
               </span>
@@ -180,7 +181,7 @@ export function ImportWizard({ accounts }: { accounts: Account[] }) {
                 onChange={(e) => setRaw(e.target.value)}
                 rows={6}
                 placeholder="Date,Description,Amount&#10;2026-09-14,Trader Joe's,-52.30"
-                className={`${fieldClass} font-mono text-[12px]`}
+                className={`${fieldClass} font-mono t-footnote`}
               />
               <button type="button" onClick={() => loadText(raw)} className={`${ghostButton} self-start`}>
                 Read this text
@@ -192,13 +193,13 @@ export function ImportWizard({ accounts }: { accounts: Account[] }) {
 
       {step === "map" ? (
         <div className="flex flex-col gap-4">
-          <p className="text-[13px] text-[var(--text-secondary)]">
+          <p className="t-subhead text-[var(--text-secondary)]">
             Ledgerly guessed these from your header row. Fix anything it got wrong — the first three
             rows of your file are shown underneath each column.
           </p>
 
-          <div className="overflow-x-auto rounded-[var(--radius-sm)] border border-[var(--border)]">
-            <table className="w-full text-[12.5px]">
+          <div className="overflow-x-auto rounded-[10px] border border-[var(--border)]">
+            <table className="w-full t-footnote">
               <thead>
                 <tr className="bg-[var(--surface-2)]">
                   {rows[0].map((h, i) => (
@@ -206,7 +207,7 @@ export function ImportWizard({ accounts }: { accounts: Account[] }) {
                       <span className="mb-1.5 block truncate font-medium text-[var(--text-primary)]">
                         {hasHeader ? h : `Column ${i + 1}`}
                       </span>
-                      <select
+                      <SelectField
                         value={roles[i] ?? "ignore"}
                         aria-label={`Role for column ${i + 1}`}
                         onChange={(e) => {
@@ -214,14 +215,14 @@ export function ImportWizard({ accounts }: { accounts: Account[] }) {
                           next[i] = e.target.value as ColumnRole;
                           setRoles(next);
                         }}
-                        className="w-full rounded-[6px] border border-[var(--border)] bg-[var(--surface-1)] px-1.5 py-1 text-[12px] text-[var(--text-primary)] outline-none focus:border-[var(--accent)]"
+                        className="w-full rounded-[8px] border-0 bg-[var(--surface-2)] px-2 py-1.5 t-footnote text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-[var(--accent)]"
                       >
                         {ROLES.map((r) => (
                           <option key={r} value={r}>
                             {ROLE_LABELS[r]}
                           </option>
                         ))}
-                      </select>
+                      </SelectField>
                     </th>
                   ))}
                 </tr>
@@ -240,25 +241,22 @@ export function ImportWizard({ accounts }: { accounts: Account[] }) {
             </table>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="flex items-center gap-2 text-[13px] text-[var(--text-secondary)]">
-              <input
-                type="checkbox"
+          <div className="divide-y divide-[var(--border)] rounded-[10px] bg-[var(--surface-2)] px-3">
+            <div className="py-1.5">
+              <Switch
                 checked={hasHeader}
-                onChange={(e) => setHasHeader(e.target.checked)}
-                className="h-4 w-4 accent-[var(--accent)]"
+                onChange={setHasHeader}
+                label="First row is a header"
               />
-              The first row is a header
-            </label>
-            <label className="flex items-center gap-2 text-[13px] text-[var(--text-secondary)]">
-              <input
-                type="checkbox"
+            </div>
+            <div className="py-1.5">
+              <Switch
                 checked={flipSign}
-                onChange={(e) => setFlipSign(e.target.checked)}
-                className="h-4 w-4 accent-[var(--accent)]"
+                onChange={setFlipSign}
+                label="Flip the sign"
+                description="My bank writes purchases as positive numbers"
               />
-              Flip the sign — my bank writes purchases as positive numbers
-            </label>
+            </div>
           </div>
 
           <div className="flex gap-2">
@@ -281,13 +279,13 @@ export function ImportWizard({ accounts }: { accounts: Account[] }) {
             <Stat label="Money in" value={formatMoney(inflow, { showCents: false })} />
           </div>
 
-          <p className="text-[13px] text-[var(--text-secondary)]">
+          <p className="t-subhead text-[var(--text-secondary)]">
             Nothing has been saved yet. Rows identical to ones already in this account are skipped
             automatically, so re-importing an overlapping statement is safe.
           </p>
 
-          <div className="max-h-[400px] overflow-auto rounded-[var(--radius-sm)] border border-[var(--border)]">
-            <table className="w-full text-[12.5px]">
+          <div className="max-h-[400px] overflow-auto rounded-[10px] border border-[var(--border)]">
+            <table className="w-full t-footnote">
               <thead className="sticky top-0 bg-[var(--surface-2)]">
                 <tr>
                   <th scope="col" className="px-3 py-2 text-left font-medium text-[var(--text-secondary)]">Date</th>
@@ -320,7 +318,7 @@ export function ImportWizard({ accounts }: { accounts: Account[] }) {
             </table>
           </div>
           {staged.length > 250 ? (
-            <p className="text-[12px] text-[var(--text-muted)]">
+            <p className="t-footnote text-[var(--text-muted)]">
               Showing the first 250 rows. All {staged.length} will be imported.
             </p>
           ) : null}
@@ -341,7 +339,7 @@ export function ImportWizard({ accounts }: { accounts: Account[] }) {
           <h2 className="text-[15px] font-semibold text-[var(--text-primary)]">
             Imported {result.inserted} {result.inserted === 1 ? "transaction" : "transactions"}
           </h2>
-          <p className="text-[13px] text-[var(--text-secondary)]">
+          <p className="t-subhead text-[var(--text-secondary)]">
             {result.duplicates > 0
               ? `${result.duplicates} ${result.duplicates === 1 ? "row was" : "rows were"} already in this account and ${result.duplicates === 1 ? "was" : "were"} skipped.`
               : "No duplicates found."}{" "}
@@ -377,8 +375,8 @@ export function ImportWizard({ accounts }: { accounts: Account[] }) {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface-2)] px-3 py-2.5">
-      <p className="text-[12px] text-[var(--text-secondary)]">{label}</p>
+    <div className="rounded-[10px] border border-[var(--border)] bg-[var(--surface-2)] px-3 py-2.5">
+      <p className="t-footnote text-[var(--text-secondary)]">{label}</p>
       <p className="figure mt-0.5 text-[18px] font-semibold text-[var(--text-primary)]">{value}</p>
     </div>
   );

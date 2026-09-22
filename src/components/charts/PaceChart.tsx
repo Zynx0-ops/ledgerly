@@ -10,8 +10,12 @@ const PAD = { top: 18, right: 54, bottom: 30, left: 52 };
 const PLOT_W = W - PAD.left - PAD.right;
 const PLOT_H = H - PAD.top - PAD.bottom;
 
-const ACTUAL = "var(--series-1)";
-const PACE = "var(--series-2)";
+// Two-series charts deliberately use slots 3 and 1 (blue / orange) rather than
+// the first two slots: the pair is far apart under every simulation
+// (CVD ΔE 33.0 light / 31.2 dark, normal-vision 39.5 / 35.9) and reads as
+// "mine vs the reference" instead of two hot hues competing.
+const ACTUAL = "var(--series-3)";
+const PACE = "var(--series-1)";
 
 /**
  * "Am I on pace?" — cumulative spending against the straight line a monthly

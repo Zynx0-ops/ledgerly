@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, fieldClass, ghostButton, labelClass, primaryButton } from "@/components/ui/Dialog";
+import { Dialog, fieldClass, labelClass, sheetDestructive, sheetPrimary } from "@/components/ui/Dialog";
 import { deleteCategory, saveCategory } from "@/server/actions";
 import { SERIES_HEX, SERIES_NAMES, SERIES_SLOTS } from "@/lib/palette";
 import type { Category, CategoryGroup } from "@/lib/types";
+import { SelectField } from "@/components/ui/Controls";
 
 export function CategoryDialog({
   category,
@@ -64,7 +65,7 @@ export function CategoryDialog({
             <label className={labelClass} htmlFor="cat-group">
               Group
             </label>
-            <select
+            <SelectField
               id="cat-group"
               name="groupId"
               defaultValue={category?.groupId ?? defaultGroupId ?? groups[0]?.id}
@@ -75,7 +76,7 @@ export function CategoryDialog({
                   {g.name}
                 </option>
               ))}
-            </select>
+            </SelectField>
           </div>
 
           <div>
@@ -101,27 +102,22 @@ export function CategoryDialog({
             </p>
           </div>
 
-          <div className="mt-1 flex items-center justify-between gap-2">
+          {/* Apple stacks sheet actions full-width at the bottom; the ✕ in the
+              header is the cancel affordance, so there is no Cancel button. */}
+          <div className="mt-2 flex flex-col gap-2">
+            <button type="submit" className={sheetPrimary}>
+              {editing ? "Save" : "Create"}
+            </button>
             {editing ? (
               <button
                 type="submit"
                 formAction={deleteCategory}
                 onClick={() => setOpen(false)}
-                className="rounded-[var(--radius-sm)] px-2.5 py-2 text-[13px] text-[var(--critical)] transition-colors hover:bg-[var(--critical-wash)]"
+                className={sheetDestructive}
               >
-                Delete
+                Delete category
               </button>
-            ) : (
-              <span />
-            )}
-            <div className="flex gap-2">
-              <button type="button" onClick={() => setOpen(false)} className={ghostButton}>
-                Cancel
-              </button>
-              <button type="submit" className={primaryButton}>
-                {editing ? "Save" : "Create"}
-              </button>
-            </div>
+            ) : null}
           </div>
         </form>
       </Dialog>

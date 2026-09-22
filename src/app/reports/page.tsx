@@ -3,7 +3,7 @@ import { Card, CardHeader } from "@/components/ui/Card";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { MonthNav } from "@/components/ui/MonthNav";
 import { StatTile } from "@/components/ui/StatTile";
-import { DonutChart } from "@/components/charts/DonutChart";
+import { SpendingSplit } from "@/components/charts/SpendingSplit";
 import { CashflowChart } from "@/components/charts/CashflowChart";
 import { BarList } from "@/components/charts/BarList";
 import {
@@ -59,7 +59,7 @@ export default async function ReportsPage({
         </Suspense>
       </PageHeader>
 
-      <div className="mb-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <StatTile label="Income" cents={summary.incomeCents} />
         </Card>
@@ -106,7 +106,7 @@ export default async function ReportsPage({
         <div className="grid gap-4 lg:grid-cols-2">
           <Card>
             <CardHeader title="Spending by group" subtitle={formatMonth(month)} />
-            <DonutChart slices={groups} />
+            <SpendingSplit slices={groups} />
           </Card>
 
           <Card>
@@ -159,26 +159,26 @@ export default async function ReportsPage({
               />
             </div>
             <div className="max-h-[420px] overflow-auto">
-              <table className="w-full text-[13px]">
+              <table className="w-full">
                 <thead className="sticky top-0 bg-[var(--surface-2)]">
                   <tr>
-                    <th scope="col" className="px-5 py-2 text-left font-medium text-[var(--text-secondary)]">
+                    <th scope="col" className="t-footnote px-5 py-2 text-left font-semibold text-[var(--text-secondary)]">
                       Month
                     </th>
-                    <th scope="col" className="px-3 py-2 text-right font-medium text-[var(--text-secondary)]">
+                    <th scope="col" className="t-footnote px-3 py-2 text-right font-semibold text-[var(--text-secondary)]">
                       In
                     </th>
-                    <th scope="col" className="px-3 py-2 text-right font-medium text-[var(--text-secondary)]">
+                    <th scope="col" className="t-footnote px-3 py-2 text-right font-semibold text-[var(--text-secondary)]">
                       Out
                     </th>
-                    <th scope="col" className="px-5 py-2 text-right font-medium text-[var(--text-secondary)]">
+                    <th scope="col" className="t-footnote px-5 py-2 text-right font-semibold text-[var(--text-secondary)]">
                       Kept
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {[...history].reverse().map((h) => (
-                    <tr key={h.month} className="border-t border-[var(--border)]">
+                    <tr key={h.month} className="border-t border-[var(--border)] t-subhead">
                       <td className="px-5 py-2 text-[var(--text-primary)]">{formatMonth(h.month)}</td>
                       <td className="tnum px-3 py-2 text-right text-[var(--text-secondary)]">
                         {formatMoney(h.incomeCents, { showCents: false })}

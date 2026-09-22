@@ -1,8 +1,8 @@
 import { clamp } from "@/lib/money";
 
 /**
- * The fill carries severity; the track is a lighter step of the same ramp, so
- * state reads across the whole bar rather than only where it's filled.
+ * A capsule progress bar in Apple's proportions. The fill carries severity; the
+ * track is a lighter step of the same ramp so state reads across the whole bar.
  */
 export function Meter({
   value,
@@ -16,8 +16,7 @@ export function Meter({
   tone?: "accent" | "warning" | "critical" | "good";
 }) {
   const ratio = max > 0 ? value / max : 0;
-  const severity =
-    tone ?? (ratio > 1 ? "critical" : ratio > 0.9 ? "warning" : "accent");
+  const severity = tone ?? (ratio > 1 ? "critical" : ratio > 0.9 ? "warning" : "accent");
 
   const fill = {
     accent: "var(--accent)",
@@ -33,8 +32,6 @@ export function Meter({
     good: "var(--good-wash)",
   }[severity];
 
-  const pct = clamp(ratio * 100, 0, 100);
-
   return (
     <div
       className="w-full overflow-hidden rounded-full"
@@ -43,8 +40,8 @@ export function Meter({
       aria-label={`${Math.round(ratio * 100)}% of budget used`}
     >
       <div
-        className="h-full rounded-full transition-[width] duration-300"
-        style={{ width: `${pct}%`, background: fill }}
+        className="h-full rounded-full transition-[width] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
+        style={{ width: `${clamp(ratio * 100, 0, 100)}%`, background: fill }}
       />
     </div>
   );

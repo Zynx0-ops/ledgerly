@@ -1,6 +1,7 @@
 /**
- * Categorical color is assigned to a *category* and stored with it, so a hue
- * follows the entity forever — filtering the chart never repaints the survivors,
+ * Apple's system hues, snapped to steps that clear the data-viz gates in both
+ * modes (see README). Categorical color is assigned to a *category* and stored
+ * with it, so a hue follows the entity forever — filtering the chart never repaints the survivors,
  * and "groceries is aqua" stays true across every screen.
  *
  * Slots are 1–8, in a fixed validated order (never cycled, never generated).
@@ -19,24 +20,24 @@ export function seriesVar(slot: number): string {
 }
 
 export const SERIES_NAMES: Record<SeriesSlot, string> = {
-  1: "Blue",
-  2: "Orange",
-  3: "Aqua",
+  1: "Orange",
+  2: "Pink",
+  3: "Blue",
   4: "Yellow",
-  5: "Magenta",
+  5: "Teal",
   6: "Green",
-  7: "Violet",
+  7: "Indigo",
   8: "Red",
 };
 
 /** Light-mode hexes, for the color picker swatches only. Charts use seriesVar(). */
 export const SERIES_HEX: Record<SeriesSlot, string> = {
-  1: "#2a78d6",
-  2: "#eb6834",
-  3: "#1baf7a",
-  4: "#eda100",
-  5: "#e87ba4",
-  6: "#008300",
-  7: "#4a3aa7",
-  8: "#e34948",
+  1: "#eb8900",
+  2: "#f8004a",
+  3: "#0074f2",
+  4: "#d7ab00",
+  5: "#21b1c9",
+  6: "#00b746",
+  7: "#504ad1",
+  8: "#f71c18",
 };

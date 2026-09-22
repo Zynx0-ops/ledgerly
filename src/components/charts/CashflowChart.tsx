@@ -19,8 +19,12 @@ const PLOT_H = H - PAD.top - PAD.bottom;
 const GAP = 2; // surface gap between the two adjacent bars
 const MAX_BAR = 24;
 
-const INCOME = "var(--series-1)";
-const EXPENSE = "var(--series-2)";
+// Two-series charts deliberately use slots 3 and 1 (blue / orange) rather than
+// the first two slots: the pair is far apart under every simulation
+// (CVD ΔE 33.0 light / 31.2 dark, normal-vision 39.5 / 35.9) and reads as
+// "mine vs the reference" instead of two hot hues competing.
+const INCOME = "var(--series-3)";
+const EXPENSE = "var(--series-1)";
 
 /** Two series of the same measure — one axis, grouped columns, legend always present. */
 export function CashflowChart({ points }: { points: CashflowPoint[] }) {

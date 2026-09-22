@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, fieldClass, ghostButton, labelClass, primaryButton } from "@/components/ui/Dialog";
+import { Dialog, fieldClass, labelClass, sheetDestructive, sheetPrimary } from "@/components/ui/Dialog";
 import { deleteAccount, saveAccount } from "@/server/actions";
 import { ACCOUNT_TYPES, type Account } from "@/lib/types";
+import { SelectField } from "@/components/ui/Controls";
 
 export function AccountDialog({
   account,
@@ -44,13 +45,13 @@ export function AccountDialog({
               <label className={labelClass} htmlFor="acct-type">
                 Type
               </label>
-              <select id="acct-type" name="type" defaultValue={account?.type ?? "checking"} className={fieldClass}>
+              <SelectField id="acct-type" name="type" defaultValue={account?.type ?? "checking"} className={fieldClass}>
                 {ACCOUNT_TYPES.map((t) => (
                   <option key={t.value} value={t.value}>
                     {t.label}
                   </option>
                 ))}
-              </select>
+              </SelectField>
             </div>
             <div>
               <label className={labelClass} htmlFor="acct-balance">
@@ -86,27 +87,22 @@ export function AccountDialog({
             Ledgerly subtracts it from your net worth.
           </p>
 
-          <div className="mt-1 flex items-center justify-between gap-2">
+          {/* Apple stacks sheet actions full-width at the bottom; the ✕ in the
+              header is the cancel affordance, so there is no Cancel button. */}
+          <div className="mt-2 flex flex-col gap-2">
+            <button type="submit" className={sheetPrimary}>
+              {editing ? "Save changes" : "Add account"}
+            </button>
             {editing ? (
               <button
                 type="submit"
                 formAction={deleteAccount}
                 onClick={() => setOpen(false)}
-                className="rounded-[var(--radius-sm)] px-2.5 py-2 text-[13px] text-[var(--critical)] transition-colors hover:bg-[var(--critical-wash)]"
+                className={sheetDestructive}
               >
-                Delete
+                Delete account
               </button>
-            ) : (
-              <span />
-            )}
-            <div className="flex gap-2">
-              <button type="button" onClick={() => setOpen(false)} className={ghostButton}>
-                Cancel
-              </button>
-              <button type="submit" className={primaryButton}>
-                {editing ? "Save changes" : "Add account"}
-              </button>
-            </div>
+            ) : null}
           </div>
         </form>
       </Dialog>

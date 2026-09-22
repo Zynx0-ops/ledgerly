@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, fieldClass, ghostButton, labelClass, primaryButton } from "@/components/ui/Dialog";
+import { Dialog, fieldClass, labelClass, sheetDestructive, sheetPrimary } from "@/components/ui/Dialog";
+import { SelectField, Switch } from "@/components/ui/Controls";
 import { saveTransaction, deleteTransaction } from "@/server/actions";
 import { todayKey } from "@/lib/dates";
 import type { Account, Category, Transaction } from "@/lib/types";
@@ -70,7 +71,7 @@ export function TransactionDialog({
               <label className={labelClass} htmlFor="tx-direction">
                 Direction
               </label>
-              <select
+              <SelectField
                 id="tx-direction"
                 name="direction"
                 defaultValue={isIncome ? "income" : "expense"}
@@ -78,7 +79,7 @@ export function TransactionDialog({
               >
                 <option value="expense">Money out</option>
                 <option value="income">Money in</option>
-              </select>
+              </SelectField>
             </div>
           </div>
 
@@ -99,7 +100,7 @@ export function TransactionDialog({
               <label className={labelClass} htmlFor="tx-account">
                 Account
               </label>
-              <select
+              <SelectField
                 id="tx-account"
                 name="accountId"
                 required
@@ -111,7 +112,7 @@ export function TransactionDialog({
                     {a.name}
                   </option>
                 ))}
-              </select>
+              </SelectField>
             </div>
           </div>
 
@@ -119,7 +120,7 @@ export function TransactionDialog({
             <label className={labelClass} htmlFor="tx-category">
               Category
             </label>
-            <select
+            <SelectField
               id="tx-category"
               name="categoryId"
               defaultValue={transaction?.categoryId ?? ""}
@@ -135,7 +136,7 @@ export function TransactionDialog({
                   ))}
                 </optgroup>
               ))}
-            </select>
+            </SelectField>
           </div>
 
           <div>
@@ -145,37 +146,31 @@ export function TransactionDialog({
             <input id="tx-notes" name="notes" defaultValue={transaction?.notes} className={fieldClass} />
           </div>
 
-          <label className="flex items-center gap-2 text-[13px] text-[var(--text-secondary)]">
-            <input
-              type="checkbox"
+          <div className="rounded-[10px] bg-[var(--surface-2)] px-3 py-1.5">
+            <Switch
               name="excluded"
               defaultChecked={transaction?.excluded}
-              className="h-4 w-4 accent-[var(--accent)]"
+              label="Exclude from budgets"
+              description="Keeps it in the ledger but out of every total"
             />
-            Exclude from budgets and reports
-          </label>
+          </div>
 
-          <div className="mt-1 flex items-center justify-between gap-2">
+          {/* Apple stacks sheet actions full-width at the bottom; the ✕ in the
+              header is the cancel affordance, so there is no Cancel button. */}
+          <div className="mt-2 flex flex-col gap-2">
+            <button type="submit" className={sheetPrimary}>
+              {editing ? "Save changes" : "Add transaction"}
+            </button>
             {editing ? (
               <button
                 type="submit"
                 formAction={deleteTransaction}
                 onClick={() => setOpen(false)}
-                className="rounded-[var(--radius-sm)] px-2.5 py-2 text-[13px] text-[var(--critical)] transition-colors hover:bg-[var(--critical-wash)]"
+                className={sheetDestructive}
               >
-                Delete
+                Delete transaction
               </button>
-            ) : (
-              <span />
-            )}
-            <div className="flex gap-2">
-              <button type="button" onClick={() => setOpen(false)} className={ghostButton}>
-                Cancel
-              </button>
-              <button type="submit" className={primaryButton}>
-                {editing ? "Save changes" : "Add transaction"}
-              </button>
-            </div>
+            ) : null}
           </div>
         </form>
       </Dialog>

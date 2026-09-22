@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, fieldClass, ghostButton, labelClass, primaryButton } from "@/components/ui/Dialog";
+import { Dialog, fieldClass, labelClass, sheetDestructive, sheetPrimary } from "@/components/ui/Dialog";
 import { deleteGoal, saveGoal } from "@/server/actions";
 import type { Goal } from "@/lib/types";
+import { SelectField } from "@/components/ui/Controls";
 
 export function GoalDialog({
   goal,
@@ -73,11 +74,11 @@ export function GoalDialog({
               <label className={labelClass} htmlFor="goal-kind">
                 Type
               </label>
-              <select id="goal-kind" name="kind" defaultValue={goal?.kind ?? "savings"} className={fieldClass}>
+              <SelectField id="goal-kind" name="kind" defaultValue={goal?.kind ?? "savings"} className={fieldClass}>
                 <option value="savings">Savings goal</option>
                 <option value="emergency">Emergency fund</option>
                 <option value="debt">Pay off debt</option>
-              </select>
+              </SelectField>
             </div>
             <div>
               <label className={labelClass} htmlFor="goal-date">
@@ -101,27 +102,22 @@ export function GoalDialog({
             <input id="goal-note" name="note" defaultValue={goal?.note} className={fieldClass} />
           </div>
 
-          <div className="mt-1 flex items-center justify-between gap-2">
+          {/* Apple stacks sheet actions full-width at the bottom; the ✕ in the
+              header is the cancel affordance, so there is no Cancel button. */}
+          <div className="mt-2 flex flex-col gap-2">
+            <button type="submit" className={sheetPrimary}>
+              {editing ? "Save changes" : "Create goal"}
+            </button>
             {editing ? (
               <button
                 type="submit"
                 formAction={deleteGoal}
                 onClick={() => setOpen(false)}
-                className="rounded-[var(--radius-sm)] px-2.5 py-2 text-[13px] text-[var(--critical)] transition-colors hover:bg-[var(--critical-wash)]"
+                className={sheetDestructive}
               >
-                Delete
+                Delete goal
               </button>
-            ) : (
-              <span />
-            )}
-            <div className="flex gap-2">
-              <button type="button" onClick={() => setOpen(false)} className={ghostButton}>
-                Cancel
-              </button>
-              <button type="submit" className={primaryButton}>
-                {editing ? "Save changes" : "Create goal"}
-              </button>
-            </div>
+            ) : null}
           </div>
         </form>
       </Dialog>

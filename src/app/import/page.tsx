@@ -38,7 +38,7 @@ export default async function ImportPage() {
           <div className="flex flex-col gap-4">
             <Card>
               <CardHeader title="Getting your CSV" />
-              <ol className="flex list-decimal flex-col gap-2 pl-4 text-[13px] leading-relaxed text-[var(--text-secondary)]">
+              <ol className="flex list-decimal flex-col gap-2 pl-4 t-subhead leading-relaxed text-[var(--text-secondary)]">
                 <li>Sign in to your bank in a browser.</li>
                 <li>
                   Find <strong className="font-medium text-[var(--text-primary)]">Download</strong>{" "}
@@ -52,7 +52,7 @@ export default async function ImportPage() {
 
             <Card>
               <CardHeader title="What Ledgerly does with it" />
-              <ul className="flex flex-col gap-2 text-[13px] leading-relaxed text-[var(--text-secondary)]">
+              <ul className="flex flex-col gap-2 t-subhead leading-relaxed text-[var(--text-secondary)]">
                 <li>
                   <strong className="font-medium text-[var(--text-primary)]">Cleans names.</strong>{" "}
                   &ldquo;POS DEBIT TRADER JOES #442&rdquo; becomes &ldquo;Trader Joes&rdquo;.

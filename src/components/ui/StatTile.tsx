@@ -1,9 +1,9 @@
 import { formatMoney } from "@/lib/money";
 
 /**
- * Stat tile contract: label · value · optional delta · optional trend.
- * The value uses proportional figures — tabular-nums makes a number like 121
- * look loose at display sizes.
+ * Stat tile contract: label · value · optional delta. The value uses
+ * proportional figures — tabular-nums makes a number like 121 look loose at
+ * display sizes.
  */
 export function StatTile({
   label,
@@ -14,48 +14,53 @@ export function StatTile({
   upIsGood = true,
   hero = false,
   hint,
+  tone,
 }: {
   label: string;
   cents?: number;
   value?: string;
-  delta?: number; // percent change
+  delta?: number;
   deltaLabel?: string;
   upIsGood?: boolean;
   hero?: boolean;
   hint?: string;
+  tone?: "good" | "critical";
 }) {
   const shown = value ?? formatMoney(cents ?? 0, { showCents: !hero });
   const hasDelta = delta != null && Number.isFinite(delta) && deltaLabel;
   const good = hasDelta ? (delta! >= 0) === upIsGood : true;
+  const color = tone === "good" ? "var(--good)" : tone === "critical" ? "var(--critical)" : "var(--text-primary)";
 
   return (
-    <div className="flex flex-col justify-between gap-2">
-      <p className="text-[13px] font-medium text-[var(--text-secondary)]">{label}</p>
+    <div className="flex flex-col justify-between gap-1.5">
+      <p className="t-subhead text-[var(--text-secondary)]">{label}</p>
       <p
-        className={`figure font-semibold text-[var(--text-primary)] ${
-          hero ? "text-[44px] leading-none" : "text-[26px] leading-none"
-        }`}
+        className="figure"
+        style={{
+          color,
+          fontSize: hero ? 40 : 27,
+          lineHeight: 1.05,
+        }}
       >
         {shown}
       </p>
       {hasDelta ? (
-        <p className="flex items-center gap-1.5 text-[12.5px]">
+        <p className="t-footnote flex items-center gap-1">
           <span
             aria-hidden
-            className="inline-block"
-            style={{ color: good ? "var(--good)" : "var(--critical)" }}
+            style={{ color: good ? "var(--good)" : "var(--critical)", fontSize: 10 }}
           >
             {delta! >= 0 ? "▲" : "▼"}
           </span>
           <span style={{ color: good ? "var(--good)" : "var(--critical)" }}>
             {Math.abs(delta!).toFixed(0)}%
           </span>
-          <span className="text-[var(--text-muted)]">{deltaLabel}</span>
+          <span className="text-[var(--text-secondary)]">{deltaLabel}</span>
         </p>
       ) : hint ? (
-        <p className="text-[12.5px] text-[var(--text-muted)]">{hint}</p>
+        <p className="t-footnote text-[var(--text-secondary)]">{hint}</p>
       ) : (
-        <p className="text-[12.5px] text-transparent select-none">—</p>
+        <p className="t-footnote text-transparent select-none">—</p>
       )}
     </div>
   );

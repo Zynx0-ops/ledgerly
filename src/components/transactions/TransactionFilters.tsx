@@ -2,7 +2,8 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
-import { fieldBase, fieldClass } from "@/components/ui/Dialog";
+import { fieldBase } from "@/components/ui/Dialog";
+import { SegmentedControl, SelectField } from "@/components/ui/Controls";
 import type { Account, Category } from "@/lib/types";
 import { groupCategories } from "./TransactionDialog";
 
@@ -36,23 +37,43 @@ export function TransactionFilters({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
-  const showingUncategorized = params.get("uncategorized") === "1";
+  const scope = params.get("uncategorized") === "1" ? "needs" : "all";
+  const selectClass = `${fieldBase} cursor-pointer py-2`;
 
   return (
     <div className="mb-4 flex flex-wrap items-center gap-2">
-      <input
-        type="search"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search merchants…"
-        aria-label="Search transactions"
-        className={`${fieldClass} w-full sm:w-56`}
+      <div className="relative w-full sm:w-64">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[13px] text-[var(--text-muted)]"
+        >
+          ⌕
+        </span>
+        <input
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search"
+          aria-label="Search transactions"
+          className={`${fieldBase} w-full rounded-[10px] py-2 pl-8`}
+        />
+      </div>
+
+      <SegmentedControl
+        label="Which transactions"
+        value={scope}
+        onChange={(next) => update("uncategorized", next === "needs" ? "1" : "")}
+        options={[
+          { value: "all", label: "All" },
+          { value: "needs", label: "Needs a category" },
+        ]}
       />
-      <select
+
+      <SelectField
         value={params.get("accountId") ?? ""}
         onChange={(e) => update("accountId", e.target.value)}
         aria-label="Filter by account"
-        className={`${fieldBase} max-w-[190px]`}
+        className={`${selectClass} max-w-[160px]`}
       >
         <option value="">All accounts</option>
         {accounts.map((a) => (
@@ -60,12 +81,13 @@ export function TransactionFilters({
             {a.name}
           </option>
         ))}
-      </select>
-      <select
+      </SelectField>
+
+      <SelectField
         value={params.get("categoryId") ?? ""}
         onChange={(e) => update("categoryId", e.target.value)}
         aria-label="Filter by category"
-        className={`${fieldBase} max-w-[190px]`}
+        className={`${selectClass} max-w-[160px]`}
       >
         <option value="">All categories</option>
         {groupCategories(categories).map(([group, items]) => (
@@ -77,19 +99,8 @@ export function TransactionFilters({
             ))}
           </optgroup>
         ))}
-      </select>
-      <button
-        type="button"
-        onClick={() => update("uncategorized", showingUncategorized ? "" : "1")}
-        aria-pressed={showingUncategorized}
-        className={`rounded-[var(--radius-sm)] border px-3 py-2 text-[13px] font-medium transition-colors ${
-          showingUncategorized
-            ? "border-[var(--warning)] bg-[var(--warning-wash)] text-[var(--warning)]"
-            : "border-[var(--border)] bg-[var(--surface-1)] text-[var(--text-secondary)] hover:bg-[var(--surface-2)]"
-        }`}
-      >
-        Needs a category
-      </button>
+      </SelectField>
+
       {[...params.keys()].some((k) => k !== "month") ? (
         <button
           type="button"
@@ -98,7 +109,7 @@ export function TransactionFilters({
             router.push(month ? `/transactions?month=${month}` : "/transactions");
             setSearch("");
           }}
-          className="px-2 py-2 text-[13px] text-[var(--accent)] hover:underline"
+          className="t-subhead px-1 text-[var(--accent)] transition-opacity active:opacity-60"
         >
           Clear
         </button>

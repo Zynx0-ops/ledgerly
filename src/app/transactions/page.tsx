@@ -4,6 +4,8 @@ import { Card } from "@/components/ui/Card";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { MonthNav } from "@/components/ui/MonthNav";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { ListSection } from "@/components/ui/List";
+import { IconTile } from "@/components/ui/IconTile";
 import { TransactionDialog } from "@/components/transactions/TransactionDialog";
 import { TransactionFilters } from "@/components/transactions/TransactionFilters";
 import { CategorySelect } from "@/components/transactions/CategorySelect";
@@ -71,7 +73,7 @@ export default async function TransactionsPage({
           <TransactionDialog
             accounts={accounts}
             categories={categories}
-            trigger={{ label: "Add transaction", className: primaryButton }}
+            trigger={{ label: "Add", className: primaryButton }}
           />
         ) : null}
       </PageHeader>
@@ -80,8 +82,8 @@ export default async function TransactionsPage({
         <TransactionFilters accounts={accounts} categories={categories} />
       </Suspense>
 
-      <Card padded={false}>
-        {!accounts.length ? (
+      {!accounts.length ? (
+        <Card>
           <EmptyState
             icon="▤"
             title="Add an account first"
@@ -89,106 +91,97 @@ export default async function TransactionsPage({
             cta="Add an account"
             href="/accounts"
           />
-        ) : !transactions.length ? (
+        </Card>
+      ) : !transactions.length ? (
+        <Card>
           <EmptyState
-            icon="≡"
+            icon="⇅"
             title="No transactions match"
             body="Try a different month, clear the filters, or import a statement from your bank."
             cta="Import a CSV"
             href="/import"
           />
-        ) : (
-          <>
-            {[...byDate.entries()].map(([date, items]) => (
-              <div key={date}>
-                <div className="sticky top-0 z-10 flex items-center justify-between border-y border-[var(--border)] bg-[var(--surface-2)] px-4 py-1.5 first:border-t-0">
-                  <span className="text-[12px] font-medium text-[var(--text-secondary)]">
-                    {formatDate(date, "long")}
-                  </span>
-                  <span className="tnum text-[12px] text-[var(--text-muted)]">
-                    {formatMoney(
-                      items.reduce((n, t) => n + t.amountCents, 0),
-                      { showCents: false, signed: true },
-                    )}
-                  </span>
-                </div>
-                <ul>
-                  {items.map((t) => (
-                    <li
-                      key={t.id}
-                      className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-2.5 transition-colors last:border-b-0 hover:bg-[var(--surface-2)]"
-                    >
-                      <span
-                        aria-hidden
-                        className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--surface-2)] text-[14px]"
-                      >
-                        {t.categoryIcon ?? "•"}
-                      </span>
-
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-[13.5px] text-[var(--text-primary)]">
-                          {t.merchant}
-                          {t.excluded ? (
-                            <span className="ml-2 rounded-full bg-[var(--surface-3)] px-1.5 py-0.5 text-[10.5px] text-[var(--text-muted)]">
-                              excluded
-                            </span>
-                          ) : null}
-                        </p>
-                        <p className="truncate text-[11.5px] text-[var(--text-muted)]">
-                          {t.accountName}
-                          {t.notes ? ` · ${t.notes}` : ""}
-                        </p>
-                      </div>
-
-                      <div className="hidden shrink-0 sm:block">
-                        <CategorySelect transaction={t} categories={categories} />
-                      </div>
-
-                      <span
-                        className="tnum w-24 shrink-0 text-right text-[13.5px] font-medium"
-                        style={{ color: t.amountCents > 0 ? "var(--good)" : "var(--text-primary)" }}
-                      >
-                        {formatMoney(t.amountCents, { signed: true })}
-                      </span>
-
-                      <TransactionDialog
-                        accounts={accounts}
-                        categories={categories}
-                        transaction={t}
-                        trigger={{
-                          label: "Edit",
-                          className:
-                            "shrink-0 rounded-[6px] px-2 py-1 text-[12px] text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-3)] hover:text-[var(--text-primary)]",
-                        }}
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-
-            {pages > 1 ? (
-              <div className="flex items-center justify-between px-4 py-3 text-[13px]">
-                <span className="text-[var(--text-muted)]">
-                  Page {page} of {pages}
+        </Card>
+      ) : (
+        <div className="flex flex-col gap-5">
+          {[...byDate.entries()].map(([date, items]) => (
+            <ListSection
+              key={date}
+              header={formatDate(date, "long")}
+              trailing={
+                <span className="tnum">
+                  {formatMoney(
+                    items.reduce((n, t) => n + t.amountCents, 0),
+                    { showCents: false, signed: true },
+                  )}
                 </span>
-                <div className="flex gap-2">
-                  {page > 1 ? (
-                    <Link href={query({ page: String(page - 1) })} className="text-[var(--accent)] hover:underline">
-                      ‹ Previous
-                    </Link>
-                  ) : null}
-                  {page < pages ? (
-                    <Link href={query({ page: String(page + 1) })} className="text-[var(--accent)] hover:underline">
-                      Next ›
-                    </Link>
-                  ) : null}
+              }
+            >
+              {items.map((t) => (
+                <div
+                  key={t.id}
+                  className="pressable relative flex items-center gap-3 px-4 py-2.5 after:pointer-events-none after:absolute after:right-0 after:bottom-0 after:left-[58px] after:h-[0.5px] after:bg-[var(--border)] last:after:hidden hover:bg-[var(--surface-2)]"
+                >
+                  <IconTile glyph={t.categoryIcon ?? "•"} colorSlot={t.categoryColorSlot} />
+
+                  <div className="min-w-0 flex-1">
+                    <p className="t-body truncate text-[var(--text-primary)]">
+                      {t.merchant}
+                      {t.excluded ? (
+                        <span className="t-caption ml-2 rounded-full bg-[var(--surface-2)] px-1.5 py-0.5 text-[var(--text-secondary)]">
+                          excluded
+                        </span>
+                      ) : null}
+                    </p>
+                    <CategorySelect transaction={t} categories={categories} />
+                  </div>
+
+                  <div className="shrink-0 text-right">
+                    <p
+                      className="tnum t-body font-medium"
+                      style={{ color: t.amountCents > 0 ? "var(--good)" : "var(--text-primary)" }}
+                    >
+                      {formatMoney(t.amountCents, { signed: true })}
+                    </p>
+                    <p className="t-caption truncate text-[var(--text-secondary)]">{t.accountName}</p>
+                  </div>
+
+                  <TransactionDialog
+                    accounts={accounts}
+                    categories={categories}
+                    transaction={t}
+                    trigger={{
+                      label: "›",
+                      className:
+                        "shrink-0 px-1 text-[17px] leading-none text-[var(--text-muted)] transition-opacity hover:text-[var(--text-secondary)] active:opacity-50",
+                    }}
+                  />
                 </div>
+              ))}
+            </ListSection>
+          ))}
+
+          {pages > 1 ? (
+            <div className="flex items-center justify-between px-1">
+              <span className="t-footnote text-[var(--text-secondary)]">
+                Page {page} of {pages}
+              </span>
+              <div className="flex gap-4">
+                {page > 1 ? (
+                  <Link href={query({ page: String(page - 1) })} className="t-subhead text-[var(--accent)]">
+                    ‹ Previous
+                  </Link>
+                ) : null}
+                {page < pages ? (
+                  <Link href={query({ page: String(page + 1) })} className="t-subhead text-[var(--accent)]">
+                    Next ›
+                  </Link>
+                ) : null}
               </div>
-            ) : null}
-          </>
-        )}
-      </Card>
+            </div>
+          ) : null}
+        </div>
+      )}
     </>
   );
 }

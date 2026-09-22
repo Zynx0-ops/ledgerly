@@ -4,8 +4,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { addMonths, currentMonth, formatMonth } from "@/lib/dates";
 
 /**
- * One filter row, above everything it scopes — every card on the page re-renders
- * against the same month, so the numbers always agree.
+ * A joined stepper pill, the way iOS Calendar and Health page through time.
+ * One filter row, above everything it scopes — every card re-renders against
+ * the same month, so the numbers always agree.
  */
 export function MonthNav({ month }: { month: string }) {
   const router = useRouter();
@@ -22,31 +23,33 @@ export function MonthNav({ month }: { month: string }) {
   const isCurrent = month === currentMonth();
 
   return (
-    <div className="flex items-center gap-1">
-      <button
-        type="button"
-        onClick={() => go(addMonths(month, -1))}
-        aria-label="Previous month"
-        className="grid h-8 w-8 place-items-center rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface-1)] text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)]"
-      >
-        ‹
-      </button>
-      <span className="min-w-[132px] text-center text-[13.5px] font-medium text-[var(--text-primary)]">
-        {formatMonth(month)}
-      </span>
-      <button
-        type="button"
-        onClick={() => go(addMonths(month, 1))}
-        aria-label="Next month"
-        className="grid h-8 w-8 place-items-center rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface-1)] text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)]"
-      >
-        ›
-      </button>
+    <div className="flex items-center gap-2">
+      <div className="flex items-center rounded-[9px] bg-[var(--surface-2)] p-[3px]">
+        <button
+          type="button"
+          onClick={() => go(addMonths(month, -1))}
+          aria-label="Previous month"
+          className="grid h-7 w-8 place-items-center rounded-[7px] text-[15px] text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-1)] hover:text-[var(--text-primary)] active:opacity-60"
+        >
+          ‹
+        </button>
+        <span className="t-subhead min-w-[124px] px-1 text-center font-semibold text-[var(--text-primary)]">
+          {formatMonth(month)}
+        </span>
+        <button
+          type="button"
+          onClick={() => go(addMonths(month, 1))}
+          aria-label="Next month"
+          className="grid h-7 w-8 place-items-center rounded-[7px] text-[15px] text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-1)] hover:text-[var(--text-primary)] active:opacity-60"
+        >
+          ›
+        </button>
+      </div>
       {!isCurrent ? (
         <button
           type="button"
           onClick={() => go(currentMonth())}
-          className="ml-1 rounded-[var(--radius-sm)] px-2 py-1 text-[12.5px] text-[var(--accent)] transition-colors hover:bg-[var(--accent-wash)]"
+          className="t-subhead text-[var(--accent)] transition-opacity active:opacity-60"
         >
           Today
         </button>
