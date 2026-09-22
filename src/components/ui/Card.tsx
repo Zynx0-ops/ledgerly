@@ -10,11 +10,7 @@ export function Card({
   padded?: boolean;
 }) {
   return (
-    <section
-      className={`rounded-[var(--radius)] bg-[var(--surface-1)] ${padded ? "p-4 sm:p-5" : ""} ${className}`}
-    >
-      {children}
-    </section>
+    <section className={`glass ${padded ? "p-5 sm:p-6" : ""} ${className}`}>{children}</section>
   );
 }
 
@@ -32,7 +28,7 @@ export function CardHeader({
       <div className="min-w-0">
         <h2 className="t-title-3 text-[var(--text-primary)]">{title}</h2>
         {subtitle ? (
-          <p className="t-subhead mt-0.5 text-[var(--text-secondary)]">{subtitle}</p>
+          <p className="t-subhead mt-1 text-[var(--text-secondary)]">{subtitle}</p>
         ) : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}

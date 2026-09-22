@@ -28,7 +28,7 @@ export function ChartTooltip({ state, width }: { state: TooltipState | null; wid
   return (
     <div
       role="tooltip"
-      className="pointer-events-none absolute z-20 min-w-[132px] rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface-1)] px-2.5 py-2 shadow-lg"
+      className="material pointer-events-none absolute z-20 min-w-[132px] rounded-[12px] px-3 py-2.5 shadow-[var(--shadow-float)] ring-1 ring-[var(--border)]"
       style={{
         left: `${(state.x / width) * 100}%`,
         top: state.y,
@@ -113,9 +113,9 @@ export function ChartTable({
         </span>
         {label}
       </summary>
-      <div className="mt-2 max-h-64 overflow-auto rounded-[var(--radius-sm)] border border-[var(--border)]">
+      <div className="mt-2 max-h-64 overflow-auto rounded-[12px] ring-1 ring-[var(--border)]">
         <table className="w-full text-[12.5px]">
-          <thead className="sticky top-0 bg-[var(--surface-2)]">
+          <thead className="material sticky top-0">
             <tr>
               {columns.map((c, i) => (
                 <th

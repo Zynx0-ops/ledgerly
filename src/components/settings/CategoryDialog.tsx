@@ -90,7 +90,7 @@ export function CategoryDialog({
                   aria-label={SERIES_NAMES[s]}
                   aria-pressed={slot === s}
                   className={`h-7 w-7 rounded-full transition-transform ${
-                    slot === s ? "ring-2 ring-[var(--text-primary)] ring-offset-2 ring-offset-[var(--surface-1)]" : ""
+                    slot === s ? "ring-2 ring-[var(--text-primary)] ring-offset-2 ring-offset-[var(--surface-0)]" : ""
                   }`}
                   style={{ background: SERIES_HEX[s] }}
                 />

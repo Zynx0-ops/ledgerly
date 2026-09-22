@@ -10,7 +10,7 @@ never asks for your bank login.
 git clone https://github.com/Zynx0-ops/ledgerly.git
 cd ledgerly
 npm install
-npm run demo     # starts on :3000 with six months of sample data to explore
+npm run demo     # starts on :4000 with six months of sample data to explore
 ```
 
 Then `npm run reset && npm run dev` when you're ready to start with your own numbers.
@@ -74,7 +74,7 @@ uploaded anywhere, because there is nowhere for it to go.
 | Framework | Next.js 16 (App Router, Server Components, Server Actions) |
 | Language | TypeScript |
 | Styling | Tailwind CSS v4 with CSS custom properties for theming |
-| Design | Apple's system palette, type scale and inset grouped lists; SF Pro via `-apple-system` |
+| Design | Warm near-black, cream ink, glass panels over soft orbs; SF Pro via `-apple-system` |
 | Database | SQLite via Node's built-in `node:sqlite` |
 | Charts | Hand-written SVG |
 
@@ -96,14 +96,20 @@ A few decisions worth knowing about if you want to extend it:
 - **Chart color belongs to the entity, not the row.** Each category stores a palette
   slot, so filtering a chart never repaints the surviving series. A ninth series folds
   into "Other" rather than inventing a hue.
-- **The palette is Apple's hues, verified rather than assumed.** Apple's system colors
-  are tuned for UI, not for charts: dropped in raw they fail on lightness
+- **The interface is monochrome; colour belongs to the data.** Ink is cream on a warm
+  near-black ground (or near-black on warm paper in light mode), panels are glass —
+  translucent, blurred, with a 1px sheen along the top edge — floating over soft
+  background orbs and a fine grain. The primary action is a cream pill with dark text,
+  never a brand colour. That leaves hue free to mean something: a category, or
+  up/down/over-budget.
+- **The chart palette is Apple's hues, verified rather than assumed.** Apple's system
+  colors are tuned for UI, not for charts: dropped in raw they fail on lightness
   (systemYellow sits at OKLCH L 0.87, well outside the band) and on colorblind
   separation (systemGreen↔systemPink ΔE 6.5). So each hue is kept and only its
   lightness is moved into the passing band, then the slot *order* is searched for one
-  that clears every adjacent pair in both light and dark. The shipped order passes
-  every gate: worst adjacent CVD ΔE 9.1 light / 8.2 dark, worst normal-vision ΔE 18.5
-  / 17.7. systemBlue stays untouched as the interactive color for buttons and links.
+  that clears every adjacent pair in both themes. Re-validated against the glass
+  surfaces it actually sits on: worst adjacent CVD ΔE 10.8 light / 8.2 dark, worst
+  normal-vision ΔE 18.5 / 17.7.
 - **Spending share is a stacked capsule, not a donut** — the segmented bar from
   iOS Settings › iPhone Storage. This is a correctness choice as much as a visual one:
   a donut sorted by size can put *any* two hues next to each other, and no
@@ -133,7 +139,7 @@ scripts/          demo seeding and reset helpers
 
 | Command | What it does |
 |---|---|
-| `npm run dev` | Start on http://localhost:3000 |
+| `npm run dev` | Start on http://localhost:4000 |
 | `npm run demo` | Same, but seeds sample data into an empty database |
 | `npm run reset` | Delete the local database and start clean |
 | `npm run build` | Production build |

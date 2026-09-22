@@ -146,7 +146,7 @@ export function PaceChart({
           {last ? (
             <>
               {/* End marker: 2px ring in the surface color keeps it legible over the line. */}
-              <circle cx={x(last.day)} cy={y(last.cents)} r={6} fill="var(--surface-1)" />
+              <circle cx={x(last.day)} cy={y(last.cents)} r={6} fill="var(--surface-opaque)" />
               <circle cx={x(last.day)} cy={y(last.cents)} r={4} fill={ACTUAL} />
               <text
                 x={Math.min(x(last.day) + 10, W - 6)}

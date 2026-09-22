@@ -24,12 +24,12 @@ export function MonthNav({ month }: { month: string }) {
 
   return (
     <div className="flex items-center gap-2">
-      <div className="flex items-center rounded-[9px] bg-[var(--surface-2)] p-[3px]">
+      <div className="flex items-center rounded-full bg-[var(--surface-2)] p-[3px]">
         <button
           type="button"
           onClick={() => go(addMonths(month, -1))}
           aria-label="Previous month"
-          className="grid h-7 w-8 place-items-center rounded-[7px] text-[15px] text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-1)] hover:text-[var(--text-primary)] active:opacity-60"
+          className="grid h-7 w-8 place-items-center rounded-full text-[15px] text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-3)] hover:text-[var(--text-primary)] active:opacity-60"
         >
           ‹
         </button>
@@ -40,7 +40,7 @@ export function MonthNav({ month }: { month: string }) {
           type="button"
           onClick={() => go(addMonths(month, 1))}
           aria-label="Next month"
-          className="grid h-7 w-8 place-items-center rounded-[7px] text-[15px] text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-1)] hover:text-[var(--text-primary)] active:opacity-60"
+          className="grid h-7 w-8 place-items-center rounded-full text-[15px] text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-3)] hover:text-[var(--text-primary)] active:opacity-60"
         >
           ›
         </button>

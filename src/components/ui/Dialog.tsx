@@ -41,7 +41,7 @@ export function Dialog({
 
   return (
     <div
-      className="animate-fade fixed inset-0 z-50 flex items-end justify-center bg-black/25 p-0 backdrop-blur-[3px] sm:items-center sm:p-4"
+      className="animate-fade fixed inset-0 z-50 flex items-end justify-center bg-black/55 p-0 backdrop-blur-[6px] sm:items-center sm:p-4"
       onClick={onClose}
       role="presentation"
     >
@@ -51,56 +51,58 @@ export function Dialog({
         aria-modal="true"
         aria-label={title}
         onClick={(e) => e.stopPropagation()}
-        className={`animate-sheet w-full ${width} max-h-[92vh] overflow-y-auto rounded-t-[var(--radius-lg)] bg-[var(--surface-1)] pb-[max(env(safe-area-inset-bottom),16px)] shadow-[var(--shadow-float)] sm:rounded-[var(--radius-lg)] sm:pb-4`}
+        className={`material animate-sheet w-full ${width} max-h-[92vh] overflow-y-auto rounded-t-[var(--radius-xl)] pb-[max(env(safe-area-inset-bottom),16px)] shadow-[var(--shadow-float)] ring-1 ring-[var(--border)] sm:rounded-[var(--radius-xl)] sm:pb-5`}
       >
         {/* Grabber — the affordance that says "this sheet can be dismissed". */}
         <div className="flex justify-center pt-2 sm:hidden">
           <span aria-hidden className="h-[5px] w-9 rounded-full bg-[var(--border-strong)]" />
         </div>
 
-        <div className="relative flex items-center justify-center px-4 pt-3 pb-3">
+        <div className="relative flex items-center justify-center px-5 pt-4 pb-4">
           <h2 className="t-title-3 text-[var(--text-primary)]">{title}</h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="absolute right-3 grid h-7 w-7 place-items-center rounded-full bg-[var(--surface-2)] text-[13px] text-[var(--text-secondary)] transition-opacity active:opacity-60"
+            className="absolute right-4 grid h-7 w-7 place-items-center rounded-full bg-[var(--surface-2)] text-[13px] text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-3)] hover:text-[var(--text-primary)]"
           >
             ✕
           </button>
         </div>
 
-        <div className="px-4">{children}</div>
+        <div className="px-5">{children}</div>
       </div>
     </div>
   );
 }
 
-/* ── Apple control styles ─────────────────────────────────────────────────── */
+/* ── Controls ─────────────────────────────────────────────────────────────── */
 
-/** iOS filled text field: no border, a tinted well, generous tap target. */
+/** A tinted well, not a bordered box — fields recede until focused. */
 export const fieldBase =
-  "rounded-[10px] border-0 bg-[var(--surface-2)] px-3 py-2.5 t-body text-[var(--text-primary)] outline-none transition-shadow placeholder:text-[var(--text-muted)] focus:ring-2 focus:ring-[var(--accent)]";
+  "rounded-[12px] border-0 bg-[var(--surface-2)] px-3.5 py-2.5 t-body text-[var(--text-primary)] outline-none transition-shadow placeholder:text-[var(--text-muted)] focus:ring-2 focus:ring-[var(--border-strong)]";
 
 export const fieldClass = `w-full ${fieldBase}`;
 
-export const labelClass = "mb-1.5 block t-footnote font-medium text-[var(--text-secondary)]";
+export const labelClass =
+  "mb-1.5 block t-caption font-semibold tracking-[0.08em] text-[var(--text-muted)] uppercase";
 
+/** The monochrome pill both reference projects use for their primary action:
+ *  cream on dark, ink on light, never a brand colour. */
 export const primaryButton =
-  "rounded-[10px] bg-[var(--accent)] px-4 py-2 t-headline text-white transition-opacity hover:opacity-90 active:opacity-70 disabled:opacity-40";
+  "rounded-full bg-[var(--accent)] px-4 py-2 t-headline text-[var(--accent-ink)] transition-all duration-200 hover:bg-[var(--accent-hover)] active:scale-[0.97] disabled:opacity-40";
 
 export const ghostButton =
-  "rounded-[10px] bg-[var(--surface-2)] px-4 py-2 t-headline text-[var(--text-primary)] transition-opacity hover:opacity-80 active:opacity-60";
+  "rounded-full bg-[var(--surface-2)] px-4 py-2 t-headline text-[var(--text-primary)] transition-all duration-200 hover:bg-[var(--surface-3)] active:scale-[0.97]";
 
-/** Full-width sheet actions, stacked — the iOS bottom-of-sheet pattern. */
 export const sheetPrimary =
-  "w-full rounded-[12px] bg-[var(--accent)] px-4 py-3 t-headline text-white transition-opacity active:opacity-70 disabled:opacity-40";
+  "w-full rounded-full bg-[var(--accent)] px-4 py-3 t-headline text-[var(--accent-ink)] transition-all duration-200 hover:bg-[var(--accent-hover)] active:scale-[0.99] disabled:opacity-40";
 
 export const sheetSecondary =
-  "w-full rounded-[12px] bg-[var(--surface-2)] px-4 py-3 t-headline text-[var(--text-primary)] transition-opacity active:opacity-60";
+  "w-full rounded-full bg-[var(--surface-2)] px-4 py-3 t-headline text-[var(--text-primary)] transition-all duration-200 hover:bg-[var(--surface-3)] active:scale-[0.99]";
 
 export const sheetDestructive =
-  "w-full rounded-[12px] px-4 py-3 t-headline text-[var(--critical)] transition-colors hover:bg-[var(--critical-wash)] active:opacity-60";
+  "w-full rounded-full px-4 py-3 t-headline text-[var(--critical)] transition-colors hover:bg-[var(--critical-wash)]";
 
 export const plainButton =
-  "t-headline text-[var(--accent)] transition-opacity hover:opacity-80 active:opacity-60";
+  "t-headline text-[var(--text-primary)] transition-opacity hover:opacity-70 active:opacity-50";

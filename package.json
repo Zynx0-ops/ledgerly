@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "demo": "node scripts/demo.mjs",
+    "dev": "next dev -p 4000",
+    "demo": "node scripts/demo.mjs -p 4000",
     "reset": "node scripts/reset.mjs",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 4000",
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },

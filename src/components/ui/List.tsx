@@ -22,13 +22,13 @@ export function ListSection({
   return (
     <section className={className}>
       {header || trailing ? (
-        <div className="mb-2 flex items-end justify-between gap-3 px-1">
+        <div className="mb-2.5 flex items-end justify-between gap-3 px-1.5">
           {header ? <h2 className="t-section">{header}</h2> : <span />}
           {trailing ? <div className="t-footnote text-[var(--text-secondary)]">{trailing}</div> : null}
         </div>
       ) : null}
-      <div className="overflow-hidden rounded-[var(--radius)] bg-[var(--surface-1)]">{children}</div>
-      {footer ? <p className="t-footnote mt-2 px-1 text-[var(--text-secondary)]">{footer}</p> : null}
+      <div className="glass overflow-hidden">{children}</div>
+      {footer ? <p className="t-footnote mt-2.5 px-1.5 text-[var(--text-muted)]">{footer}</p> : null}
     </section>
   );
 }

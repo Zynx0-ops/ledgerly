@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
 /** iOS segmented control: a pill track with a sliding white "thumb" behind the
  *  selected option. */
@@ -21,32 +21,54 @@ export function SegmentedControl<T extends string>({
   const pad = size === "sm" ? "p-[2px]" : "p-[3px]";
   const text = size === "sm" ? "t-footnote" : "t-subhead";
 
+  const track = useRef<HTMLDivElement>(null);
+  const buttons = useRef<(HTMLButtonElement | null)[]>([]);
+  const [thumb, setThumb] = useState<{ left: number; width: number } | null>(null);
+
+  // The options are not equal width — "All" next to "Needs a category" — so the
+  // thumb measures the selected button rather than assuming an even split.
+  useLayoutEffect(() => {
+    const measure = () => {
+      const el = buttons.current[index];
+      const box = track.current;
+      if (!el || !box) return;
+      setThumb({ left: el.offsetLeft, width: el.offsetWidth });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (track.current) ro.observe(track.current);
+    buttons.current.forEach((b) => b && ro.observe(b));
+    return () => ro.disconnect();
+  }, [index, options.length]);
+
   return (
     <div
+      ref={track}
       role="tablist"
       aria-label={label}
-      className={`relative inline-flex ${pad} rounded-[9px] bg-[var(--surface-2)]`}
+      className={`relative inline-flex ${pad} rounded-full bg-[var(--surface-2)]`}
     >
-      <span
-        aria-hidden
-        className="absolute top-[3px] bottom-[3px] rounded-[7px] bg-[var(--surface-1)] shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_1px_rgba(0,0,0,0.04)] transition-transform duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]"
-        style={{
-          width: `calc((100% - 6px) / ${options.length})`,
-          transform: `translateX(calc(${index} * 100%))`,
-          left: 3,
-        }}
-      />
-      {options.map((o) => (
+      {thumb ? (
+        <span
+          aria-hidden
+          className="absolute top-[3px] bottom-[3px] rounded-full bg-[var(--accent)] shadow-[0_2px_10px_-2px_var(--accent-glow)] transition-[transform,width] duration-[260ms] ease-[cubic-bezier(0.34,1.4,0.64,1)]"
+          style={{ left: 0, width: thumb.width, transform: `translateX(${thumb.left}px)` }}
+        />
+      ) : null}
+      {options.map((o, i) => (
         <button
           key={o.value}
+          ref={(el) => {
+            buttons.current[i] = el;
+          }}
           type="button"
           role="tab"
           aria-selected={o.value === value}
           onClick={() => onChange(o.value)}
-          className={`relative z-10 flex-1 rounded-[7px] px-3 py-1 whitespace-nowrap ${text} transition-colors ${
+          className={`relative z-10 rounded-full px-3.5 py-1 whitespace-nowrap ${text} transition-colors duration-200 ${
             o.value === value
-              ? "font-semibold text-[var(--text-primary)]"
-              : "text-[var(--text-secondary)]"
+              ? "font-semibold text-[var(--accent-ink)]"
+              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
           }`}
         >
           {o.label}
@@ -91,11 +113,11 @@ export function Switch({
         />
         <span
           aria-hidden
-          className="block h-[31px] w-[51px] rounded-full bg-[var(--surface-3)] transition-colors duration-200 peer-checked:bg-[var(--good)] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--accent)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--surface-1)]"
+          className="block h-[31px] w-[51px] rounded-full bg-[var(--surface-3)] transition-colors duration-200 peer-checked:bg-[var(--accent)] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--accent)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--surface-0)]"
         />
         <span
           aria-hidden
-          className="pointer-events-none absolute top-[2px] left-[2px] h-[27px] w-[27px] rounded-full bg-white shadow-[0_3px_8px_rgba(0,0,0,0.15),0_1px_1px_rgba(0,0,0,0.16)] transition-transform duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] peer-checked:translate-x-[20px]"
+          className="pointer-events-none absolute top-[2px] left-[2px] h-[27px] w-[27px] rounded-full bg-[var(--surface-0)] shadow-[0_3px_8px_rgba(0,0,0,0.35)] transition-transform duration-200 ease-[cubic-bezier(0.34,1.4,0.64,1)] peer-checked:translate-x-[20px]"
         />
       </span>
     </label>

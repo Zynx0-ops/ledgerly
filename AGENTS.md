@@ -43,5 +43,11 @@ that look like rounding noise or a chart that lies.
   3:1 contrast, and the table plus direct value labels are what make them legal.
 - **Pages are `force-dynamic`.** They read a local database; prerendering them serves
   stale numbers.
+- **The UI is monochrome on purpose.** Accent is `--accent` (cream on dark, ink on
+  light) with `--accent-ink` for text on it. Never introduce a brand hue for a button,
+  link or selected state — hue is reserved for data and for status.
+- **Panels are `.glass`, not a background colour.** `--surface-1` is translucent, so a
+  mark that must actually *mask* what is behind it (a chart's surface ring) uses
+  `--surface-opaque`, and floating chrome uses `.material`.
 
 <!-- END:ledgerly-project-rules -->

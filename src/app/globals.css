@@ -1,142 +1,56 @@
 @import "tailwindcss";
 
-/* ── Apple-style design tokens ───────────────────────────────────────────────
-   Colors follow Apple's system palette. Light surfaces use the "grouped
-   background" model: a gray canvas with white content cards sitting on it.
-   Dark mode is selected, not flipped — declared under both the OS media query
-   and the explicit toggle, so the toggle wins either way.
+/* ── Design tokens ───────────────────────────────────────────────────────────
+   Shared language with the GPA Calculator and the trading bot: warm near-black,
+   cream ink, glass panels over soft orbs, and a monochrome accent — cream on
+   dark, ink on light. Colour is reserved for data.
+   Dark is the default; light is the same system inverted to warm paper.
    ────────────────────────────────────────────────────────────────────────── */
 :root {
-  color-scheme: light;
-
-  /* Grouped backgrounds */
-  --surface-0: #f2f2f7;        /* systemGroupedBackground  */
-  --surface-1: #ffffff;        /* secondarySystemGrouped   */
-  --surface-2: #f2f2f7;        /* wells, tracks, hover     */
-  --surface-3: #e5e5ea;        /* pressed / active         */
-  --surface-elevated: rgba(255, 255, 255, 0.72);
-
-  /* Separators — hairlines, not borders */
-  --border: rgba(60, 60, 67, 0.16);
-  --border-strong: rgba(60, 60, 67, 0.29);
-
-  /* Label colors */
-  --text-primary: #000000;
-  --text-secondary: rgba(60, 60, 67, 0.62);
-  --text-muted: rgba(60, 60, 67, 0.38);
-  --text-inverse: #ffffff;
-
-  /* systemBlue — the interactive color: links, buttons, selection */
-  --accent: #007aff;
-  --accent-hover: #0071eb;
-  --accent-wash: rgba(0, 122, 255, 0.12);
-
-  /* Status — reserved. systemGreen / systemOrange / systemRed. */
-  --good: #248a3d;
-  --good-wash: rgba(52, 199, 89, 0.14);
-  --warning: #b25000;
-  --warning-wash: rgba(255, 149, 0, 0.16);
-  --serious: #c93400;
-  --critical: #d70015;
-  --critical-wash: rgba(255, 59, 48, 0.12);
-
-  /* Categorical series — Apple's system hues, snapped to steps that clear the
-     data-viz gates (lightness band, chroma floor, CVD ΔE, normal-vision ΔE).
-     Fixed order, never cycled; a ninth series folds into "Other". */
-  --series-1: #eb8900;  /* orange */
-  --series-2: #f8004a;  /* pink   */
-  --series-3: #0074f2;  /* blue   */
-  --series-4: #d7ab00;  /* yellow */
-  --series-5: #21b1c9;  /* teal   */
-  --series-6: #00b746;  /* green  */
-  --series-7: #504ad1;  /* indigo */
-  --series-8: #f71c18;  /* red    */
-
-  --grid: rgba(60, 60, 67, 0.12);
-
-  /* Apple's shapes: large continuous-feeling radii, almost no shadow. */
-  --radius: 12px;
-  --radius-sm: 10px;
-  --radius-lg: 18px;
-  --shadow-card: none;
-  --shadow-float: 0 8px 28px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.08);
-
-  --hairline: 0.5px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) {
-    color-scheme: dark;
-
-    --surface-0: #000000;
-    --surface-1: #1c1c1e;
-    --surface-2: #2c2c2e;
-    --surface-3: #3a3a3c;
-    --surface-elevated: rgba(30, 30, 32, 0.76);
-
-    --border: rgba(84, 84, 88, 0.45);
-    --border-strong: rgba(84, 84, 88, 0.65);
-
-    --text-primary: #ffffff;
-    --text-secondary: rgba(235, 235, 245, 0.6);
-    --text-muted: rgba(235, 235, 245, 0.35);
-    --text-inverse: #000000;
-
-    --accent: #0a84ff;
-    --accent-hover: #3d9bff;
-    --accent-wash: rgba(10, 132, 255, 0.22);
-
-    --good: #30d158;
-    --good-wash: rgba(48, 209, 88, 0.18);
-    --warning: #ff9f0a;
-    --warning-wash: rgba(255, 159, 10, 0.18);
-    --serious: #ff6b22;
-    --critical: #ff453a;
-    --critical-wash: rgba(255, 69, 58, 0.18);
-
-    --series-1: #d08000;
-    --series-2: #ed004c;
-    --series-3: #0082ff;
-    --series-4: #b09300;
-    --series-5: #00a4bb;
-    --series-6: #00a93d;
-    --series-7: #5f5bed;
-    --series-8: #f32823;
-
-    --grid: rgba(235, 235, 245, 0.12);
-    --shadow-float: 0 8px 28px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
-  }
-}
-
-:root[data-theme="dark"] {
   color-scheme: dark;
 
-  --surface-0: #000000;
-  --surface-1: #1c1c1e;
-  --surface-2: #2c2c2e;
-  --surface-3: #3a3a3c;
-  --surface-elevated: rgba(30, 30, 32, 0.76);
+  --cream: #f4efe4;
+  --ink-black: #08080a;
 
-  --border: rgba(84, 84, 88, 0.45);
-  --border-strong: rgba(84, 84, 88, 0.65);
+  /* Surfaces */
+  --surface-0: #08080a;                          /* page                */
+  --surface-1: rgba(244, 239, 228, 0.055);       /* glass panel         */
+  --surface-2: rgba(244, 239, 228, 0.06);        /* wells, fields       */
+  --surface-3: rgba(244, 239, 228, 0.105);       /* hover / pressed     */
+  --glass-top: rgba(244, 239, 228, 0.085);
+  --glass-bot: rgba(244, 239, 228, 0.032);
+  --glass-solid: rgba(20, 20, 23, 0.9);          /* sheets, popovers    */
+  --surface-opaque: #151516;                     /* glass, flattened    */
+  --sheen: rgba(255, 255, 255, 0.26);
 
-  --text-primary: #ffffff;
-  --text-secondary: rgba(235, 235, 245, 0.6);
-  --text-muted: rgba(235, 235, 245, 0.35);
-  --text-inverse: #000000;
+  /* Strokes are hairlines, never borders */
+  --border: rgba(244, 239, 228, 0.1);
+  --border-strong: rgba(244, 239, 228, 0.2);
 
-  --accent: #0a84ff;
-  --accent-hover: #3d9bff;
-  --accent-wash: rgba(10, 132, 255, 0.22);
+  /* Ink */
+  --text-primary: #f4efe4;
+  --text-secondary: rgba(244, 239, 228, 0.58);
+  --text-muted: rgba(244, 239, 228, 0.34);
+  --text-inverse: #0a0a0c;
 
+  /* Monochrome accent — a cream pill with dark text */
+  --accent: #f4efe4;
+  --accent-ink: #0a0a0c;
+  --accent-hover: #ffffff;
+  --accent-wash: rgba(244, 239, 228, 0.12);
+  --accent-glow: rgba(244, 239, 228, 0.16);
+
+  /* Status — the only places colour speaks about state */
   --good: #30d158;
-  --good-wash: rgba(48, 209, 88, 0.18);
-  --warning: #ff9f0a;
-  --warning-wash: rgba(255, 159, 10, 0.18);
-  --serious: #ff6b22;
-  --critical: #ff453a;
-  --critical-wash: rgba(255, 69, 58, 0.18);
+  --good-wash: rgba(48, 209, 88, 0.16);
+  --warning: #ffd60a;
+  --warning-wash: rgba(255, 214, 10, 0.14);
+  --serious: #ff9f0a;
+  --critical: #ff6b5e;
+  --critical-wash: rgba(255, 107, 94, 0.15);
 
+  /* Categorical series — Apple hues snapped to steps that clear the data-viz
+     gates against this surface. Fixed order, never cycled. */
   --series-1: #d08000;
   --series-2: #ed004c;
   --series-3: #0082ff;
@@ -146,8 +60,139 @@
   --series-7: #5f5bed;
   --series-8: #f32823;
 
-  --grid: rgba(235, 235, 245, 0.12);
-  --shadow-float: 0 8px 28px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --grid: rgba(244, 239, 228, 0.1);
+
+  /* Shape */
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+
+  --shadow-card: 0 24px 60px -28px rgba(0, 0, 0, 0.9), 0 2px 8px -4px rgba(0, 0, 0, 0.6);
+  --shadow-float: 0 32px 70px -30px rgba(0, 0, 0, 0.95), 0 4px 14px -6px rgba(0, 0, 0, 0.7);
+
+  --blur: blur(28px) saturate(180%);
+  --grain-opacity: 0.035;
+  --orb-a: rgba(244, 239, 228, 0.13);
+  --orb-b: rgba(160, 150, 130, 0.16);
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --t-fast: 140ms;
+  --t-mid: 260ms;
+}
+
+/* Light is the same system on warm paper. Declared under both the OS query and
+   the explicit toggle, so the toggle wins either way. */
+@media (prefers-color-scheme: light) {
+  :root:where(:not([data-theme="dark"])) {
+    color-scheme: light;
+
+    --surface-0: #ede8dc;
+    --surface-1: rgba(255, 255, 255, 0.5);
+    --surface-2: rgba(11, 11, 13, 0.045);
+    --surface-3: rgba(11, 11, 13, 0.085);
+    --glass-top: rgba(255, 255, 255, 0.76);
+    --glass-bot: rgba(255, 255, 255, 0.4);
+    --glass-solid: rgba(252, 250, 245, 0.95);
+    --surface-opaque: #f6f4ee;
+    --sheen: rgba(255, 255, 255, 0.85);
+
+    --border: rgba(11, 11, 13, 0.1);
+    --border-strong: rgba(11, 11, 13, 0.2);
+
+    --text-primary: #0b0b0d;
+    --text-secondary: rgba(11, 11, 13, 0.56);
+    --text-muted: rgba(11, 11, 13, 0.34);
+    --text-inverse: #f4efe4;
+
+    --accent: #0b0b0d;
+    --accent-ink: #f4efe4;
+    --accent-hover: #000000;
+    --accent-wash: rgba(11, 11, 13, 0.08);
+    --accent-glow: rgba(11, 11, 13, 0.12);
+
+    --good: #1f8b3b;
+    --good-wash: rgba(31, 139, 59, 0.12);
+    --warning: #9a6b00;
+    --warning-wash: rgba(255, 184, 0, 0.18);
+    --serious: #c2410c;
+    --critical: #cc3024;
+    --critical-wash: rgba(204, 48, 36, 0.1);
+
+    --series-1: #eb8900;
+    --series-2: #f8004a;
+    --series-3: #0074f2;
+    --series-4: #d7ab00;
+    --series-5: #21b1c9;
+    --series-6: #00b746;
+    --series-7: #504ad1;
+    --series-8: #f71c18;
+
+    --grid: rgba(11, 11, 13, 0.1);
+
+    --shadow-card: 0 18px 44px -26px rgba(40, 34, 20, 0.5), 0 2px 6px -3px rgba(40, 34, 20, 0.16);
+    --shadow-float: 0 30px 64px -28px rgba(40, 34, 20, 0.55), 0 4px 12px -6px rgba(40, 34, 20, 0.2);
+
+    --grain-opacity: 0.02;
+    --orb-a: rgba(255, 255, 255, 0.7);
+    --orb-b: rgba(203, 190, 160, 0.4);
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --surface-0: #ede8dc;
+  --surface-1: rgba(255, 255, 255, 0.5);
+  --surface-2: rgba(11, 11, 13, 0.045);
+  --surface-3: rgba(11, 11, 13, 0.085);
+  --glass-top: rgba(255, 255, 255, 0.76);
+  --glass-bot: rgba(255, 255, 255, 0.4);
+  --glass-solid: rgba(252, 250, 245, 0.95);
+  --surface-opaque: #f6f4ee;
+  --sheen: rgba(255, 255, 255, 0.85);
+
+  --border: rgba(11, 11, 13, 0.1);
+  --border-strong: rgba(11, 11, 13, 0.2);
+
+  --text-primary: #0b0b0d;
+  --text-secondary: rgba(11, 11, 13, 0.56);
+  --text-muted: rgba(11, 11, 13, 0.34);
+  --text-inverse: #f4efe4;
+
+  --accent: #0b0b0d;
+  --accent-ink: #f4efe4;
+  --accent-hover: #000000;
+  --accent-wash: rgba(11, 11, 13, 0.08);
+  --accent-glow: rgba(11, 11, 13, 0.12);
+
+  --good: #1f8b3b;
+  --good-wash: rgba(31, 139, 59, 0.12);
+  --warning: #9a6b00;
+  --warning-wash: rgba(255, 184, 0, 0.18);
+  --serious: #c2410c;
+  --critical: #cc3024;
+  --critical-wash: rgba(204, 48, 36, 0.1);
+
+  --series-1: #eb8900;
+  --series-2: #f8004a;
+  --series-3: #0074f2;
+  --series-4: #d7ab00;
+  --series-5: #21b1c9;
+  --series-6: #00b746;
+  --series-7: #504ad1;
+  --series-8: #f71c18;
+
+  --grid: rgba(11, 11, 13, 0.1);
+
+  --shadow-card: 0 18px 44px -26px rgba(40, 34, 20, 0.5), 0 2px 6px -3px rgba(40, 34, 20, 0.16);
+  --shadow-float: 0 30px 64px -28px rgba(40, 34, 20, 0.55), 0 4px 12px -6px rgba(40, 34, 20, 0.2);
+
+  --grain-opacity: 0.02;
+  --orb-a: rgba(255, 255, 255, 0.7);
+  --orb-b: rgba(203, 190, 160, 0.4);
 }
 
 @theme inline {
@@ -161,7 +206,7 @@
   --color-ink-2: var(--text-secondary);
   --color-ink-3: var(--text-muted);
   --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
+  --color-accent-ink: var(--accent-ink);
   --color-accent-wash: var(--accent-wash);
   --color-good: var(--good);
   --color-good-wash: var(--good-wash);
@@ -184,81 +229,154 @@ html {
 body {
   background: var(--surface-0);
   color: var(--text-primary);
-  /* On a Mac this resolves to SF Pro — the real system face, not a web copy. */
   font-family:
-    -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
     "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-synthesis-weight: none;
   font-size: 15px;
   line-height: 1.47;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.011em;
+  overflow-x: hidden;
+  transition:
+    background-color 460ms var(--ease),
+    color 460ms var(--ease);
 }
 
-/* ── Apple type scale ─────────────────────────────────────────────────────── */
-.t-large-title { font-size: 32px; line-height: 1.12; font-weight: 700; letter-spacing: -0.026em; }
-.t-title-2     { font-size: 21px; line-height: 1.2;  font-weight: 700; letter-spacing: -0.021em; }
-.t-title-3     { font-size: 17px; line-height: 1.3;  font-weight: 600; letter-spacing: -0.014em; }
+/* ── Atmosphere: orbs behind everything, then a fine grain over them ──────── */
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(42vmax 34vmax at 18% 8%, var(--orb-a), transparent 62%),
+    radial-gradient(38vmax 30vmax at 86% 78%, var(--orb-b), transparent 64%);
+  filter: blur(18px);
+}
+
+.grain {
+  position: absolute;
+  inset: -50%;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Glass panel ──────────────────────────────────────────────────────────── */
+.glass {
+  position: relative;
+  background: linear-gradient(180deg, var(--glass-top), var(--glass-bot));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  isolation: isolate;
+}
+
+/* A 1px gradient rule that catches light at the top edge — the sheen that makes
+   the panel read as glass rather than a flat tinted box. */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    150deg,
+    var(--sheen) 0%,
+    transparent 34%,
+    transparent 66%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0.55;
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .glass {
+    background: var(--glass-solid);
+  }
+}
+
+/* ── Type scale ───────────────────────────────────────────────────────────── */
+.t-large-title { font-size: 34px; line-height: 1.08; font-weight: 700; letter-spacing: -0.032em; }
+.t-title-2     { font-size: 22px; line-height: 1.18; font-weight: 600; letter-spacing: -0.024em; }
+.t-title-3     { font-size: 17px; line-height: 1.3;  font-weight: 600; letter-spacing: -0.016em; }
 .t-headline    { font-size: 15px; line-height: 1.35; font-weight: 600; letter-spacing: -0.012em; }
-.t-body        { font-size: 15px; line-height: 1.45; font-weight: 400; letter-spacing: -0.01em; }
+.t-body        { font-size: 15px; line-height: 1.45; font-weight: 400; letter-spacing: -0.011em; }
 .t-subhead     { font-size: 13.5px; line-height: 1.4; font-weight: 400; letter-spacing: -0.006em; }
 .t-footnote    { font-size: 12.5px; line-height: 1.35; font-weight: 400; letter-spacing: 0; }
 .t-caption     { font-size: 11.5px; line-height: 1.3; font-weight: 400; letter-spacing: 0.004em; }
 
-/* Grouped-list section header: uppercase, tracked out, quiet. */
+/* The small, wide-tracked uppercase label both reference projects lead with. */
 .t-section {
-  font-size: 12.5px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--text-secondary);
 }
 
-/* Numbers that align vertically get equal-width digits. Hero figures do not —
-   tabular-nums makes a number like 121 look loose at display sizes. */
 .tnum { font-variant-numeric: tabular-nums; }
+
+/* Big values: tightly tracked, proportional figures — tabular-nums makes a
+   number like 121 look loose at display sizes. */
 .figure {
   font-variant-numeric: proportional-nums;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.038em;
   font-weight: 600;
 }
 
-/* ── Materials ────────────────────────────────────────────────────────────── */
+/* ── Materials & interaction ──────────────────────────────────────────────── */
 .material {
-  background: var(--surface-elevated);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  background: var(--glass-solid);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
 }
 @supports not (backdrop-filter: blur(1px)) {
-  .material { background: var(--surface-1); }
+  .material { background: var(--glass-solid); }
 }
 
-/* Pressable rows get Apple's quick highlight rather than a hover fade. */
-.pressable { transition: background-color 120ms ease-out; }
+.pressable { transition: background-color var(--t-fast) var(--ease); }
 .pressable:active { background-color: var(--surface-3); }
 
 ::selection { background: var(--accent-wash); }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(var(--cal-invert, 0));
+  filter: invert(var(--cal-invert, 1));
   cursor: pointer;
 }
-:root[data-theme="dark"] input[type="date"] { --cal-invert: 1; }
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) input[type="date"] { --cal-invert: 1; }
+:root[data-theme="light"] input[type="date"] { --cal-invert: 0; }
+@media (prefers-color-scheme: light) {
+  :root:where(:not([data-theme="dark"])) input[type="date"] { --cal-invert: 0; }
 }
 
-/* Apple's sheets slide up. */
 @keyframes sheet-in {
-  from { transform: translateY(12px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
+  from { transform: translateY(14px) scale(0.99); opacity: 0; }
+  to   { transform: translateY(0) scale(1);       opacity: 1; }
 }
 @keyframes fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-.animate-sheet { animation: sheet-in 260ms cubic-bezier(0.32, 0.72, 0, 1); }
-.animate-fade  { animation: fade-in 180ms ease-out; }
+.animate-sheet { animation: sheet-in 300ms var(--ease-out); }
+.animate-fade  { animation: fade-in 200ms var(--ease); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
